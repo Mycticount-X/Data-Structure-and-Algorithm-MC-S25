@@ -1,2 +1,3 @@
 *.exe
-TestGPT.cpp
+testGPT.cpp
+.vscode

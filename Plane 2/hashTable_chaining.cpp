@@ -14,7 +14,7 @@ Zone* HashTable [TSIZE];
 // Polynomial Rolling Hash
 int hash (int x) {
 	int base = 31;
-    int mod = TABLE_SIZE;
+    int mod = TSIZE;
     int key = 0;
     while (x > 0) {
         key = (key * base + (x % 10)) % mod;
@@ -38,7 +38,7 @@ Zone* CreateZone (int MTX) {
 
 void Insert (int MTX) {
 	int key = hash(MTX);
-	Zone* newzone = CreateZone[MTX];
+	Zone* newzone = CreateZone(MTX);
 	newzone->next = HashTable[key];
 }
 
