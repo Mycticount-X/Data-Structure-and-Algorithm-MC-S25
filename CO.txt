@@ -1,0 +1,18 @@
+CO MC-S25:
+[V] Linked List
+[V] Doubly Linked List
+    [V] Stack
+    [V] Queue
+    [V] Priority Queue
+
+[V] Binary Tree
+    [V] Binary Search Tree
+    [ ] AVL Tree
+
+[ ] Hash Table
+	[ ] (Trash) Probing
+	[ ] Chaining
+
+[ ] Graph
+	[ ] Kruskal
+	[ ] Prim
