@@ -28,12 +28,10 @@ This repository contains implementations of various data structures using C lang
   - [ ] Kruskal
   - [ ] Prim
 
-## Lore: Lorongmono and Myctix Entities
-Alam ini memiliki konsentrasi **Myctix** yang sangat tinggi, menyebabkan makhluk biasa bermutasi menjadi **Entitas Myctix**. Entitas ini terbentuk dari kombinasi Myctix dan material bermemori, menciptakan bentuk kehidupan unik dengan kemampuan luar biasa.
+## Lore: Lorongmono
+Alam dengan konsentrasi Myctix amat tinggi yang mampu membuat makhluk biasa bermutasi menjadi **Entitas Myctix**. Entitas Myctix adalah Entitas yang terbentuk dari konsentrasi Myctix amat tinggi yang tercampur dengan material bermemori. Akibat konsentrasi Myctix yang tinggi makhluk-makhluk di dalamnya menghasilkan material berkualitas tinggi. Lorongmono dikuasai oleh peringkat tiga dari Tiga Belas Entitas Myctix: Ether the Quantum Glitch.
 
-Lorongmono dikuasai oleh **Ether the Quantum Glitch**, peringkat tiga dari **Tiga Belas Entitas Myctix**. Wilayah ini terdiri dari **8 Permukaan (Plane)**, di mana setiap permukaannya memiliki **Zona (Node)** dan **Celah (Edge)** yang jumlahnya tak terhingga.
-
-Saat seseorang memasuki Lorongmono, mereka akan muncul di sebuah Zona acak pada **Permukaan Pertama**. Semakin tinggi permukaannya, semakin eksponensial tingkat **Konsentrasi Myctix**, membawa tantangan yang lebih besar.
+Terdapat 8 **Permukaan (Plane)** di Lorongmono yang tiap permukaannya berisi **Zona (Node)** dan **Celah (Edge)** yang tak terhingga jumlahnya. Setiap kali memasuki Lorongmono, seseorang akan dibawa ke dalam Zona acak di Permukaan Pertama. Seiring meningkatnya level permukaan, tingkat Konsentrasi Myctix akan meningkat secara eksponensial.
 
 ---
 Stay tuned for updates as we continue exploring more complex data structures!
