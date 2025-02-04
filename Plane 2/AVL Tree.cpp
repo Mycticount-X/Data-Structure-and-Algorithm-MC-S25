@@ -176,6 +176,26 @@ Zone *DeleteZone(Zone *root, int target) {
     return root;
 }
 
+// Search Command - Return Height
+Zone* SearchZone (Zone* root, int MTX) {
+	if (root == NULL) {
+		printf("Zona dengan MTX %d tidak ditemukan!\n", MTX);
+		return NULL;
+	}
+	
+	if (MTX == root->MTX) {
+		printf("Zona dengan MTX %d ditemukan!\n", MTX);
+		printf("Height: %d\n", root->height);
+		return NULL;
+	}
+	
+	if (MTX < root->MTX) {
+        return SearchZone(root->left, MTX);
+    } else {
+        return SearchZone(root->right, MTX);
+    }
+}
+
 // Alter Command
 void ClearPlane(Zone *root) {
     if (root == NULL) return;
@@ -233,7 +253,12 @@ int main() {
 
     printf("Postorder: ");
     Postorder(Core);
-    printf("\n\n\n");
+    printf("\n\n");
+    
+	Core = SearchZone(Core, 7500);
+	Core = SearchZone(Core, 9900);	
+    printf("\n\n");
+    
     
     printf("Menghapus Zona 7500...\n");
 	Core = DeleteZone(Core, 7500);
