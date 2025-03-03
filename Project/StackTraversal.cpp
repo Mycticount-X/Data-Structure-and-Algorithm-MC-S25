@@ -43,7 +43,7 @@ void Push (char MTX) {
 // Pop Command
 void Pop() {
     if (head == NULL) {
-        printf("Permukaan saat ini kosong!\n");
+//        printf("Permukaan saat ini kosong!\n");
         return;
     }
     
@@ -61,7 +61,7 @@ void Pop() {
 // Peek / Peep Command
 char Peek() {
 	if (head == NULL) {
-        // printf("Permukaan saat ini kosong!\n");
+        printf("Permukaan saat ini kosong!\n");
         return 0;
     }
     
@@ -83,9 +83,7 @@ void ClearPlane() {
 
 // Leveling
 int level (char c) {
-    if (c == '(' || c == ')')
-        return 4;
-    else if (c == '^')
+    if (c == '^')
         return 3;
     else if (c == '*' || c == '/')
         return 2;
@@ -95,6 +93,10 @@ int level (char c) {
     else return 0; // Spasi dan Operator tidak jelas
 }
 
+int isOperand (char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
 // Stack Traversal
 char* InfixtoPostfix (char* infix) {
     char* postfix = (char*) malloc(sizeof(char) * 100);
@@ -102,7 +104,7 @@ char* InfixtoPostfix (char* infix) {
 
     while (infix[i] != '\0') {
         // Operand
-        if (infix[i] >= 'A' && infix[i] <= 'Z') {
+        if (isOperand(infix[i])) {
             postfix[j++] = infix[i];
         }
         
@@ -143,6 +145,7 @@ char* InfixtoPostfix (char* infix) {
     return postfix;
 }
 
+
 void revstr (char* str) {
     int len = strlen(str);
     for (int i = 0; i < len/2; i++) {
@@ -150,15 +153,70 @@ void revstr (char* str) {
         str[i] = str[len-1-i];
         str[len-1-i] = c;
     }
+    
+    for (int i = 0; i < len; i++) {
+        if (str[i] == '(')
+        	str[i] = ')';
+        else if (str[i] == ')')
+        	str[i] = '(';
+    } 
 }
 
 char* InfixtoPrefix(char* infix) {
-    char* reversed = (char*) malloc(sizeof(char) * 100);
-    strcpy(reversed, infix);
-    revstr(reversed);
-    char* prefix = InfixtoPostfix(reversed);
-    revstr(prefix);
-    free(reversed);
+    char* temp = (char*) malloc(sizeof(char) * 100);
+    strcpy(temp, infix);
+    
+	// Reverse
+	revstr(temp);
+    
+	// Postfix
+	char* prefix = (char*) malloc(sizeof(char) * 100);
+    int i = 0, j = 0;
+
+    while (temp[i] != '\0') {
+        // Operand
+        if (isOperand(temp[i])) {
+            prefix[j++] = temp[i];
+        }
+        
+        // Parenthesis
+        else if (temp[i] == '(') {
+            Push(temp[i]);
+        }
+        
+        else if (temp[i] == ')') {
+            while (head != NULL && Peek() != '(') {
+                prefix[j++] = Peek();
+                Pop();
+            }
+            Pop();
+        }
+        
+        // Operator
+        else {
+            if (level(temp[i]) > 0) {
+                while (head != NULL && (level(Peek()) > level(temp[i])) ) {
+                    prefix[j++] = Peek();
+                    Pop();
+                }
+                Push(temp[i]);
+            }
+        }
+
+        i++;
+    }
+
+    // Bersih-bersih
+    while (head != NULL) {
+        prefix[j++] = Peek();
+        Pop();
+    }
+
+    prefix[j] = '\0';
+    
+	// Reverse
+	revstr(prefix);
+	
     return prefix;
 }
 
@@ -169,6 +227,7 @@ int main() {
     char input[100];
     printf("%sMasukan Infix: %s", MAGENTA, RESET);
     scanf(" %[^\n]", input);
+    printf("Infix: %s\n", input);
 
     char* postfix = InfixtoPostfix(input);
     char* prefix = InfixtoPrefix(input);
@@ -180,3 +239,5 @@ int main() {
     free(prefix);
     return 0;
 }
+
+
