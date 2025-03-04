@@ -262,7 +262,11 @@ void ViewMenu () {
         while (getchar() != '\n');
         return;
     }
-
+    
+    printf("%s(i) Gunakan Full Screen untuk pengalaman terbaik!\n%s", YELLOW, RESET);
+    printf("=================================================================================================================================================\n");
+    printf("| Book ID                        | Book Title                                         | Book Author               | ISBN          | Page Number |\n");
+    printf("=================================================================================================================================================\n");
     for (int i = 0; i < TSIZE; i++) {
         struct Zone* curr = HashTable[i];
         while (curr) {
@@ -271,12 +275,13 @@ void ViewMenu () {
             curr = curr->next;
         }
     }
+    printf("=================================================================================================================================================\n\n");
 
     printf("Press enter to continue...");
     while (getchar() != '\n');
 }
 
-void InsertBook () {
+void InsertMenu () {
     char id[40];
     char name[100];
     char author[40];
@@ -306,7 +311,7 @@ void InsertBook () {
         printf("Masukkan Jumlah Halaman: "); scanf("%d", &pages);
     } while (pages < 16);
 
-    // ID = BXXXXX-ISBN-Author-Name
+    // ID = BXXXXX-ISBN-AuthorName
     bookcc++;
     sprintf(id, "B%05d-%s-%c%c", bookcc, isbn, author[0], name[0]);
 
@@ -352,7 +357,7 @@ void ExitMenu () {
 		} else if (input == '\r') {
 			switch (position) {
 				case 0:
-					printf("Thank you for using BlueJack Hospital!\n");
+					printf("Thank you for using BlueJack Library!\n");
 					printf("Have a nice day :)\n\n");
 					Sleep(1000);
 
