@@ -90,7 +90,7 @@ bool Delete (char id[]) {
     int key = hash(id);
 	Zone* curr = HashTable[key];
 	
-	while (curr != NULL && curr->id != id) {
+	while (curr != NULL && strcmp(curr->id, id) != 0) {
 		curr = curr->next;
 	}
 	
@@ -117,15 +117,6 @@ bool Delete (char id[]) {
     return true;
 }
 
-bool isNotEmpty (){
-    for (int i = 0; i < TSIZE; i++) {
-        if (HashTable[i] == NULL) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 // Alter Command
 void ClearPlane() {
@@ -140,6 +131,7 @@ void ClearPlane() {
         HashTable[i] = NULL;
     }
 }
+
 
 // Helper Function
 bool isUnique (char name[]) {
@@ -160,19 +152,9 @@ bool isAuthor (char name[]) {
         return false;
     }
 
-    if (name[0] == 'M' && name[1] == 'r' && name[2] == '.') {
+    if (strncmp(name, "Mr.", 3) == 0 || strncmp(name, "Mrs.", 4) == 0) {
         return true;
     }
-
-    if (strlen(name) < 4) {
-        return false;
-    }
-
-    if (name[0] == 'M' && name[1] == 'r' && name[2] == 's' && name[3] == '.') {
-        return true;
-    }
-
-    return false;
 }
 
 bool isNum (char isbn[]) {
@@ -185,6 +167,15 @@ bool isNum (char isbn[]) {
     return true;
 }
 
+bool isNotEmpty (){
+    for (int i = 0; i < TSIZE; i++) {
+        if (HashTable[i] != NULL) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Prototype Function
 void Menu();
 void ViewMenu();
@@ -194,6 +185,13 @@ void ExitMenu();
 
 int main () {
 	initHashTable();
+    char id[40] = "B00001-23456789012-ML";
+    char name[100] = "Legend of Sacred Master";
+    char author[40] = "Mr. Mikhail Cychael";
+    char isbn[40] = "23456789012";
+    int pages = 100; bookcc++;
+    Insert(id, name, author, isbn, pages);
+    Menu ();
 	return 0;
 }
 
@@ -252,25 +250,26 @@ void ViewMenu () {
         while (getchar() != '\n');
         return;
     }
-
+    
+    printf("%s(i) Gunakan Full Screen untuk pengalaman terbaik!\n%s", YELLOW, RESET);
+    printf("=================================================================================================================================================\n");
+    printf("| Book ID                        | Book Title                                         | Book Author               | ISBN          | Page Number |\n");
+    printf("=================================================================================================================================================\n");
     for (int i = 0; i < TSIZE; i++) {
         struct Zone* curr = HashTable[i];
         while (curr) {
-            printf("ID: %s\n", curr->id);
-            printf("Name: %s\n", curr->name);
-            printf("Author: %s\n", curr->author);
-            printf("ISBN: %s\n", curr->isbn);
-            printf("Pages: %d\n", curr->pages);
-            printf("\n");
+            printf("| %30s | %50s | %25s | %13s | %11d |\n",
+                curr->id, curr->name, curr->author, curr->isbn, curr->pages);
             curr = curr->next;
         }
     }
+    printf("=================================================================================================================================================\n\n");
 
     printf("Press enter to continue...");
     while (getchar() != '\n');
 }
 
-void InsertBook () {
+void InsertMenu () {
     char id[40];
     char name[100];
     char author[40];
@@ -300,9 +299,9 @@ void InsertBook () {
         printf("Masukkan Jumlah Halaman: "); scanf("%d", &pages);
     } while (pages < 16);
 
-    // ID = BXXXXX-ISBN-Author-Name
+    // ID = BXXXXX-ISBN-AuthorName
     bookcc++;
-    sprintf(id, "B%05d-%s-%c-%c", bookcc, isbn, author[0], name[0]);
+    sprintf(id, "B%05d-%s-%c%c", bookcc, isbn, author[0], name[0]);
 
     Insert(id, name, author, isbn, pages);
 }
@@ -339,7 +338,7 @@ void ExitMenu () {
 		} else if (input == '\r') {
 			switch (position) {
 				case 0:
-					printf("Thank you for using BlueJack Hospital!\n");
+					printf("Thank you for using BlueJack Library!\n");
 					printf("Have a nice day :)\n\n");
 					Sleep(1000);
 
