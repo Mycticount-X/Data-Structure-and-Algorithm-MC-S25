@@ -34,6 +34,7 @@ struct Zone {
 Zone* HashTable [TSIZE];
 int bookcc = 0;
 
+<<<<<<< HEAD
 // Saya menggunakan Polynomial Rolling Hash
 int hash(char id[]) {
     long long sum = 0;
@@ -45,6 +46,17 @@ int hash(char id[]) {
 }
 
 
+=======
+// Polynomial Rolling Hash
+int hash (char id[]) {
+	int sum = 0;
+    for (int i = 0; id[i] != '\0'; i++) {
+        sum += id[i];
+    }
+    return sum % TSIZE;
+}
+
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 void initHashTable () {
 	for (int i = 0; i < TSIZE; i++) {
 		HashTable[i] = NULL;
@@ -72,6 +84,7 @@ void Insert (char id[], char name[], char author[], char isbn[], int pages) {
 	if (HashTable[key] == NULL) {
         HashTable[key] = newzone;
     }
+<<<<<<< HEAD
 
     // Agar Insert lebih cepat saya Push di Depan
     else {
@@ -88,6 +101,20 @@ void Insert (char id[], char name[], char author[], char isbn[], int pages) {
     //     }
     //     temp->next = newzone;
     //     newzone->prev = temp;
+=======
+    else {
+        Zone* temp = HashTable[key];
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newzone;
+        newzone->prev = temp;
+    }
+    // else {
+    //     newzone->next = HashTable[key];
+    //     HashTable[key]->prev = newzone;
+    //     HashTable[key] = newzone;
+>>>>>>> 2279f5e (Project Baru: BJ Library)
     // }
 }
 
@@ -96,7 +123,11 @@ bool Delete (char id[]) {
     int key = hash(id);
 	Zone* curr = HashTable[key];
 	
+<<<<<<< HEAD
 	while (curr != NULL && strcmp(curr->id, id) != 0) {
+=======
+	while (curr != NULL && curr->id != id) {
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 		curr = curr->next;
 	}
 	
@@ -123,6 +154,18 @@ bool Delete (char id[]) {
     return true;
 }
 
+<<<<<<< HEAD
+=======
+bool isNotEmpty (){
+    for (int i = 0; i < TSIZE; i++) {
+        if (HashTable[i] == NULL) {
+            return false;
+        }
+    }
+
+    return true;
+}
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 
 // Alter Command
 void ClearPlane() {
@@ -136,10 +179,15 @@ void ClearPlane() {
         }
         HashTable[i] = NULL;
     }
+<<<<<<< HEAD
     bookcc = 0;
 }
 
 
+=======
+}
+
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 // Helper Function
 bool isUnique (char name[]) {
     for (int i = 0; i < TSIZE; i++) {
@@ -159,7 +207,19 @@ bool isAuthor (char name[]) {
         return false;
     }
 
+<<<<<<< HEAD
     if (strncmp(name, "Mr.", 3) == 0 || strncmp(name, "Mrs.", 4) == 0) {
+=======
+    if (name[0] == 'M' && name[1] == 'r' && name[2] == '.') {
+        return true;
+    }
+
+    if (strlen(name) < 4) {
+        return false;
+    }
+
+    if (name[0] == 'M' && name[1] == 'r' && name[2] == 's' && name[3] == '.') {
+>>>>>>> 2279f5e (Project Baru: BJ Library)
         return true;
     }
 
@@ -176,6 +236,7 @@ bool isNum (char isbn[]) {
     return true;
 }
 
+<<<<<<< HEAD
 bool isNotEmpty (){
     for (int i = 0; i < TSIZE; i++) {
         if (HashTable[i] != NULL) {
@@ -185,6 +246,8 @@ bool isNotEmpty (){
     return false;
 }
 
+=======
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 // Prototype Function
 void Menu();
 void ViewMenu();
@@ -194,6 +257,7 @@ void ExitMenu();
 
 int main () {
 	initHashTable();
+<<<<<<< HEAD
 
     // Test Init
     char id[40] = "B00001-23456789012-ML";
@@ -205,6 +269,8 @@ int main () {
 
     // Start Menu
     Menu ();
+=======
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 	return 0;
 }
 
@@ -258,11 +324,16 @@ void Menu () {
 
 void ViewMenu () {
     if (!isNotEmpty()) {
+<<<<<<< HEAD
         printf("%s(i) Tidak ada buku yang tersedia%s\n", RED, RESET);
+=======
+        printf("%s(i) Tidak ada buku yang tersedia%s\n", YELLOW, RESET);
+>>>>>>> 2279f5e (Project Baru: BJ Library)
         printf("Press enter to continue...");
         while (getchar() != '\n');
         return;
     }
+<<<<<<< HEAD
     
     printf("%s(i) Gunakan Full Screen untuk pengalaman terbaik!\n%s", YELLOW, RESET);
     printf("=================================================================================================================================================\n");
@@ -277,12 +348,31 @@ void ViewMenu () {
         }
     }
     printf("=================================================================================================================================================\n\n");
+=======
+
+    for (int i = 0; i < TSIZE; i++) {
+        struct Zone* curr = HashTable[i];
+        while (curr) {
+            printf("ID: %s\n", curr->id);
+            printf("Name: %s\n", curr->name);
+            printf("Author: %s\n", curr->author);
+            printf("ISBN: %s\n", curr->isbn);
+            printf("Pages: %d\n", curr->pages);
+            printf("\n");
+            curr = curr->next;
+        }
+    }
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 
     printf("Press enter to continue...");
     while (getchar() != '\n');
 }
 
+<<<<<<< HEAD
 void InsertMenu () {
+=======
+void InsertBook () {
+>>>>>>> 2279f5e (Project Baru: BJ Library)
     char id[40];
     char name[100];
     char author[40];
@@ -293,10 +383,17 @@ void InsertMenu () {
         printf("\nNama Buku harus 5-50 karakter dan unik\n");
         printf("Masukkan Nama Buku [5-50]: ");
         scanf(" %[^\n]", name);
+<<<<<<< HEAD
     } while (strlen(name) < 5 || strlen(name) > 50 || !isUnique(name)); 
     
     do {
         printf("\nPenulis harus 3-25 karakter dan dimulai dengan [Mr.] atau [Mrs.]\n");
+=======
+    } while (strlen(name) < 4 || strlen(name) > 25 || !isUnique(name)); 
+    
+    do {
+        printf("\nPenulis harus 3-25 karakter dan dimulai dengan [Mr.] atau [Ms.]\n");
+>>>>>>> 2279f5e (Project Baru: BJ Library)
         printf("Masukkan Penulis [3-25]: ");
         scanf(" %[^\n]", author);
     } while (strlen(author) < 3 || strlen(author) > 25 || !isAuthor(author));
@@ -312,6 +409,7 @@ void InsertMenu () {
         printf("Masukkan Jumlah Halaman: "); scanf("%d", &pages);
     } while (pages < 16);
 
+<<<<<<< HEAD
     // ID = BXXXXX-ISBN-AuthorName
     bookcc++;
     sprintf(id, "B%05d-%s-%c%c", bookcc, isbn, author[0], name[0]);
@@ -321,6 +419,13 @@ void InsertMenu () {
     printf("%s\n(i) Buku berhasil ditambahkan%s\n", GREEN, RESET);
     printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
+=======
+    // ID = BXXXXX-ISBN-Author-Name
+    bookcc++;
+    sprintf(id, "B%05d-%s-%c-%c", bookcc, isbn, author[0], name[0]);
+
+    Insert(id, name, author, isbn, pages);
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 }
 
 void DeleteMenu () {
@@ -329,6 +434,7 @@ void DeleteMenu () {
     scanf(" %[^\n]", id);
     
     if (Delete(id)) {
+<<<<<<< HEAD
         printf("%s (i) Buku berhasil dihapus%s\n", GREEN, RESET);
     } else {
         printf("%s (i) Buku tidak ditemukan%s\n", RED, RESET);
@@ -336,6 +442,12 @@ void DeleteMenu () {
 
     printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
+=======
+        printf("Buku berhasil dihapus\n");
+    } else {
+        printf("Buku tidak ditemukan\n");
+    }
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 }
 
 void ExitMenu () {
@@ -358,7 +470,11 @@ void ExitMenu () {
 		} else if (input == '\r') {
 			switch (position) {
 				case 0:
+<<<<<<< HEAD
 					printf("Thank you for using BlueJack Library!\n");
+=======
+					printf("Thank you for using BlueJack Hospital!\n");
+>>>>>>> 2279f5e (Project Baru: BJ Library)
 					printf("Have a nice day :)\n\n");
 					Sleep(1000);
 
