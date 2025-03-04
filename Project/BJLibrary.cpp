@@ -119,6 +119,10 @@ bool Delete (char id[]) {
     return true;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba20583 (Banyak Bug anjir)
 // Alter Command
 void ClearPlane() {
     for (int i = 0; i < TSIZE; i++) {
