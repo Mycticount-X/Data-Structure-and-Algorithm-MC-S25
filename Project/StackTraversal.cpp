@@ -292,7 +292,6 @@ void Menu () {
                 case 3:
                     ViewMenu();
                     break;
-
                 case 4:
 					ExitMenu();
 					break;
@@ -367,4 +366,47 @@ void ViewMenu () {
 
     printf("Press enter to continue...");
     while (getchar() != '\n');
+}
+
+void ExitMenu () {
+	int position = 0;
+	char input;
+	while (true) {
+		printf(" %sAre you sure want to exit?%s\n", BLUE, RESET);
+		printf("%s 1. Yes %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. No %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		input = _getch();
+		system("cls");
+		if (input == 'w' || input == 'W') {
+			if (position > 0) {
+				position--;
+			}
+		} else if (input == 's' || input == 'S') {
+			if (position < 1) {
+				position++;
+			}
+		} else if (input == '\r') {
+			switch (position) {
+				case 0:
+					printf("Thank you for using Stack Traversal!\n");
+					printf("Have a nice day :)\n\n");
+					Sleep(1000);
+
+					printf("%sCreator:%s\n", MAGENTA, RESET);
+					printf("Name: Michael AS\n");
+					printf("Github: Mycticount_X\n");
+					printf("Youtube: Mycticount X\n");
+					printf("HSR: 825019617\n");
+					exit(0);
+					break;
+				case 1:
+					return;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+			}
+		}
+	}
+
 }
