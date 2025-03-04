@@ -26,7 +26,7 @@ struct Zone {
 
 Zone *head = NULL, *tail = NULL;
 
-char Infix[1000];
+char Infix[1000] = "(A + B) * (C - D) / E + F * G - H";
 
 Zone *CreateZone(char MTX) {
     Zone *newZone = (Zone*) malloc(sizeof(Zone));
@@ -301,8 +301,9 @@ void InsertMenu () {
     if (strcmpi(input, "exit") == 0 || strcmpi(input, "cancel") == 0) {
         printf("%s(i) Insert canceled! %s\n", YELLOW, RESET);
 
-        printf("Press enter to continue...");
+        printf("Press enter to continue..."); getchar();
 	    while (getchar() != '\n');
+        return;
     }
 
     strcpy(Infix, input);
