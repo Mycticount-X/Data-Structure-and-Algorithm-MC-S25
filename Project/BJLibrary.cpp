@@ -155,6 +155,8 @@ bool isAuthor (char name[]) {
     if (strncmp(name, "Mr.", 3) == 0 || strncmp(name, "Mrs.", 4) == 0) {
         return true;
     }
+
+    return false;
 }
 
 bool isNum (char isbn[]) {
@@ -245,7 +247,7 @@ void Menu () {
 
 void ViewMenu () {
     if (!isNotEmpty()) {
-        printf("%s(i) Tidak ada buku yang tersedia%s\n", YELLOW, RESET);
+        printf("%s(i) Tidak ada buku yang tersedia%s\n", RED, RESET);
         printf("Press enter to continue...");
         while (getchar() != '\n');
         return;
@@ -258,7 +260,7 @@ void ViewMenu () {
     for (int i = 0; i < TSIZE; i++) {
         struct Zone* curr = HashTable[i];
         while (curr) {
-            printf("| %30s | %50s | %25s | %13s | %11d |\n",
+            printf("| %-30s | %-50s | %-25s | %-13s | %-11d |\n",
                 curr->id, curr->name, curr->author, curr->isbn, curr->pages);
             curr = curr->next;
         }
@@ -280,10 +282,10 @@ void InsertMenu () {
         printf("\nNama Buku harus 5-50 karakter dan unik\n");
         printf("Masukkan Nama Buku [5-50]: ");
         scanf(" %[^\n]", name);
-    } while (strlen(name) < 4 || strlen(name) > 25 || !isUnique(name)); 
+    } while (strlen(name) < 5 || strlen(name) > 50 || !isUnique(name)); 
     
     do {
-        printf("\nPenulis harus 3-25 karakter dan dimulai dengan [Mr.] atau [Ms.]\n");
+        printf("\nPenulis harus 3-25 karakter dan dimulai dengan [Mr.] atau [Mrs.]\n");
         printf("Masukkan Penulis [3-25]: ");
         scanf(" %[^\n]", author);
     } while (strlen(author) < 3 || strlen(author) > 25 || !isAuthor(author));
@@ -304,6 +306,10 @@ void InsertMenu () {
     sprintf(id, "B%05d-%s-%c%c", bookcc, isbn, author[0], name[0]);
 
     Insert(id, name, author, isbn, pages);
+
+    printf("%s\n(i) Buku berhasil ditambahkan%s\n", GREEN, RESET);
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n');
 }
 
 void DeleteMenu () {
@@ -312,10 +318,13 @@ void DeleteMenu () {
     scanf(" %[^\n]", id);
     
     if (Delete(id)) {
-        printf("Buku berhasil dihapus\n");
+        printf("%s (i) Buku berhasil dihapus%s\n", GREEN, RESET);
     } else {
-        printf("Buku tidak ditemukan\n");
+        printf("%s (i) Buku tidak ditemukan%s\n", RED, RESET);
     }
+
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n');
 }
 
 void ExitMenu () {
