@@ -6,7 +6,7 @@
 #include <conio.h>
 
 // Global Define
-#define MENU_ITEMS 4
+#define MENU_ITEMS 5
 
 // Atribut ANSI
 #define RESET   "\033[0m"  // Buat reset akhiran
@@ -237,20 +237,7 @@ void ViewMenu();
 void ExitMenu();
 
 int main() {
-    system("cls");
-    char input[100];
-    printf("%sMasukan Infix: %s", MAGENTA, RESET);
-    scanf(" %[^\n]", input);
-    printf("Infix: %s\n", input);
-
-    char* postfix = InfixtoPostfix(input);
-    char* prefix = InfixtoPrefix(input);
-
-    printf("Postfix: %s\n", postfix);
-    printf("Prefix: %s\n", prefix);
-
-    free(postfix);
-    free(prefix);
+    Menu();
     return 0;
 }
 
@@ -328,13 +315,13 @@ void InsertMenu () {
     printf("Prefix: %s\n", prefix);
     printf("%s(i) Insert success! %s\n\n", GREEN, RESET);
 
-    printf("Press enter to continue...");
+    printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
 }
 
 void PostfixMenu () {
     char* postfix = InfixtoPostfix(Infix);
-    printf("Postfix: %s\n", postfix);
+    printf("%s(i) Postfix:%s %s\n", YELLOW, RESET, postfix);
     free(postfix);
 
     printf("Press enter to continue...");
@@ -343,7 +330,7 @@ void PostfixMenu () {
 
 void PrefixMenu () {
     char* prefix = InfixtoPrefix(Infix);
-    printf("Prefix: %s\n", prefix);
+    printf("%s(i) Prefix:%s %s\n", YELLOW, RESET, prefix);
     free(prefix);
 
     printf("Press enter to continue...");
@@ -353,13 +340,13 @@ void PrefixMenu () {
 void ViewMenu () {
     printf("%sAll Traversal using Stack:%s\n", CYAN, RESET);
 
-    printf("Infix: %s\n", Infix);
+    printf("Infix   : %s\n", Infix);
 
     char* postfix = InfixtoPostfix(Infix);
     char* prefix = InfixtoPrefix(Infix);
 
-    printf("Postfix: %s\n", postfix);
-    printf("Prefix: %s\n", prefix);
+    printf("Postfix : %s\n", postfix);
+    printf("Prefix  : %s\n", prefix);
 
     free(postfix);
     free(prefix);
