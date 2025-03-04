@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <windows.h>
+#include <conio.h>
+
+// Global Define
+#define MENU_ITEMS 4
 
 // Atribut ANSI
 #define RESET   "\033[0m"  // Buat reset akhiran
@@ -19,6 +25,8 @@ struct Zone {
 };
 
 Zone *head = NULL, *tail = NULL;
+
+char Infix[1000];
 
 Zone *CreateZone(char MTX) {
     Zone *newZone = (Zone*) malloc(sizeof(Zone));
@@ -220,7 +228,12 @@ char* InfixtoPrefix(char* infix) {
     return prefix;
 }
 
-
+// Prototype Menu Function
+void Menu();
+void InsertMenu();
+void PostfixMenu();
+void PrefixMenu();
+void ExitMenu();
 
 int main() {
     system("cls");
@@ -241,3 +254,69 @@ int main() {
 }
 
 
+// Menu Function
+void Menu () {
+	int position = 0;
+	char input;
+	system("cls");
+	while (true) {
+		printf("%s Stack Traversal%s\n", CYAN, RESET);
+		printf("%s 1. Insert Infix %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. View Postfix %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. View Prefix %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Exit %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < MENU_ITEMS - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    InsertMenu();
+                    break;
+                case 1:
+                    PostfixMenu();
+                    break;
+                case 2:
+                    PrefixMenu();
+                    break;
+                case 3:
+					ExitMenu();
+					break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
+}
+
+void InsertMenu () {
+    char input[100];
+    printf("%sMasukan Infix: %s", MAGENTA, RESET);
+    scanf(" %[^\n]", input);
+
+    if (strcmpi(input, "exit") == 0 || strcmpi(input, "cancel") == 0) {
+        printf("%s(i) Insert canceled! %s\n", YELLOW, RESET);
+
+        printf("Press enter to continue...");
+	    while (getchar() != '\n');
+    }
+
+    strcpy(Infix, input);
+    printf("Infix: %s\n", Infix);
+    printf("%s(i) Insert success! %s\n\n", GREEN, RESET);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
