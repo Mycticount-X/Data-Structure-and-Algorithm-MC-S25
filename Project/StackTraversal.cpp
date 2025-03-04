@@ -233,6 +233,7 @@ void Menu();
 void InsertMenu();
 void PostfixMenu();
 void PrefixMenu();
+void ViewMenu();
 void ExitMenu();
 
 int main() {
@@ -264,7 +265,8 @@ void Menu () {
 		printf("%s 1. Insert Infix %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
 		printf("%s 2. View Postfix %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
 		printf("%s 3. View Prefix %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
-		printf("%s 4. Exit %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+		printf("%s 4. View All %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
         printf("\nGunakan [W] dan [S] untuk Navigasi");
 		input = _getch();
 		system("cls");
@@ -288,6 +290,10 @@ void Menu () {
                     PrefixMenu();
                     break;
                 case 3:
+                    ViewMenu();
+                    break;
+
+                case 4:
 					ExitMenu();
 					break;
 				default:
@@ -315,7 +321,49 @@ void InsertMenu () {
 
     strcpy(Infix, input);
     printf("Infix: %s\n", Infix);
+
+    char* postfix = InfixtoPostfix(input);
+    char* prefix = InfixtoPrefix(input);
+
+    printf("Postfix: %s\n", postfix);
+    printf("Prefix: %s\n", prefix);
     printf("%s(i) Insert success! %s\n\n", GREEN, RESET);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void PostfixMenu () {
+    char* postfix = InfixtoPostfix(Infix);
+    printf("Postfix: %s\n", postfix);
+    free(postfix);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void PrefixMenu () {
+    char* prefix = InfixtoPrefix(Infix);
+    printf("Prefix: %s\n", prefix);
+    free(prefix);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void ViewMenu () {
+    printf("%sAll Traversal using Stack:%s\n", CYAN, RESET);
+
+    printf("Infix: %s\n", Infix);
+
+    char* postfix = InfixtoPostfix(Infix);
+    char* prefix = InfixtoPrefix(Infix);
+
+    printf("Postfix: %s\n", postfix);
+    printf("Prefix: %s\n", prefix);
+
+    free(postfix);
+    free(prefix);
 
     printf("Press enter to continue...");
     while (getchar() != '\n');
