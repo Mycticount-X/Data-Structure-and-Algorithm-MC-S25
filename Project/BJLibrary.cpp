@@ -159,6 +159,8 @@ bool isAuthor (char name[]) {
     if (strncmp(name, "Mr.", 3) == 0 || strncmp(name, "Mrs.", 4) == 0) {
         return true;
     }
+
+    return false;
 }
 
 bool isNum (char isbn[]) {
@@ -262,7 +264,7 @@ void ViewMenu () {
     for (int i = 0; i < TSIZE; i++) {
         struct Zone* curr = HashTable[i];
         while (curr) {
-            printf("| %30s | %50s | %25s | %13s | %11d |\n",
+            printf("| %-30s | %-50s | %-25s | %-13s | %-11d |\n",
                 curr->id, curr->name, curr->author, curr->isbn, curr->pages);
             curr = curr->next;
         }
@@ -307,6 +309,10 @@ void InsertBook () {
     sprintf(id, "B%05d-%s-%c%c", bookcc, isbn, author[0], name[0]);
 
     Insert(id, name, author, isbn, pages);
+
+    printf("%s\n(i) Buku berhasil ditambahkan%s\n", GREEN, RESET);
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n');
 }
 
 void DeleteMenu () {
