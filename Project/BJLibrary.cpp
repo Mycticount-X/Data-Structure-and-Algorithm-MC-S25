@@ -34,14 +34,16 @@ struct Zone {
 Zone* HashTable [TSIZE];
 int bookcc = 0;
 
-// Polynomial Rolling Hash
-int hash (char id[]) {
-	int sum = 0;
+// Saya menggunakan Polynomial Rolling Hash
+int hash(char id[]) {
+    long long sum = 0;
+    int prime = 31;
     for (int i = 0; id[i] != '\0'; i++) {
-        sum += id[i];
+        sum = (sum * prime + id[i]) % TSIZE;
     }
-    return sum % TSIZE;
+    return (int)sum;
 }
+
 
 void initHashTable () {
 	for (int i = 0; i < TSIZE; i++) {
@@ -70,18 +72,22 @@ void Insert (char id[], char name[], char author[], char isbn[], int pages) {
 	if (HashTable[key] == NULL) {
         HashTable[key] = newzone;
     }
+
+    // Agar Insert lebih cepat saya Push di Depan
     else {
-        Zone* temp = HashTable[key];
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = newzone;
-        newzone->prev = temp;
+        newzone->next = HashTable[key];
+        HashTable[key]->prev = newzone;
+        HashTable[key] = newzone;
     }
+
+    // Jika ingin Push di Belakang:
     // else {
-    //     newzone->next = HashTable[key];
-    //     HashTable[key]->prev = newzone;
-    //     HashTable[key] = newzone;
+    //     Zone* temp = HashTable[key];
+    //     while (temp->next != NULL) {
+    //         temp = temp->next;
+    //     }
+    //     temp->next = newzone;
+    //     newzone->prev = temp;
     // }
 }
 
@@ -130,6 +136,7 @@ void ClearPlane() {
         }
         HashTable[i] = NULL;
     }
+    bookcc = 0;
 }
 
 
@@ -187,12 +194,16 @@ void ExitMenu();
 
 int main () {
 	initHashTable();
+
+    // Test Init
     char id[40] = "B00001-23456789012-ML";
     char name[100] = "Legend of Sacred Master";
     char author[40] = "Mr. Mikhail Cychael";
     char isbn[40] = "23456789012";
     int pages = 100; bookcc++;
     Insert(id, name, author, isbn, pages);
+
+    // Start Menu
     Menu ();
 	return 0;
 }
