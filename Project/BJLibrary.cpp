@@ -34,14 +34,16 @@ struct Zone {
 Zone* HashTable [TSIZE];
 int bookcc = 0;
 
-// Polynomial Rolling Hash
-int hash (char id[]) {
-	int sum = 0;
+// Saya menggunakan Polynomial Rolling Hash
+int hash(char id[]) {
+    long long sum = 0;
+    int prime = 31;
     for (int i = 0; id[i] != '\0'; i++) {
-        sum += id[i];
+        sum = (sum * prime + id[i]) % TSIZE;
     }
-    return sum % TSIZE;
+    return (int)sum;
 }
+
 
 void initHashTable () {
 	for (int i = 0; i < TSIZE; i++) {
