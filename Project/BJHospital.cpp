@@ -286,7 +286,7 @@ void ExitMenu () {
 
 					printf("%sCreator:%s\n", MAGENTA, RESET);
 					printf("Name: Michael AS\n");
-					printf("Github: Mycticount_X\n");
+					printf("Github: Mycticount-X\n");
 					printf("Youtube: Mycticount X\n");
 					printf("HSR: 825019617\n");
 					exit(0);
