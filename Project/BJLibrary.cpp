@@ -107,7 +107,11 @@ bool Delete (char id[]) {
 	
 	// Cek prev
 	if (curr->prev != NULL) {
+		curr->prev->next = curr->next;
 	} else {
+		HashTable[key] = curr->next;
+	}
+	
 	// Cek next
 	if (curr->next != NULL) {
 		curr->next->prev = curr->prev;
@@ -118,6 +122,7 @@ bool Delete (char id[]) {
 	
     return true;
 }
+
 
 // Alter Command
 void ClearPlane() {
