@@ -183,6 +183,12 @@ bool isDrink(char drink[]) {
     return false;
 }
 
+void refreshPoints(Customer* curr) {
+    int points = (curr->spend / 50000) * 3;
+    curr->spend = curr->spend % 50000;
+    curr->points += points;
+}
+
 // Prototype Function
 void Menu();
 void InsertMenu();
@@ -285,6 +291,7 @@ void ExitMenu () {
 }
 
 void InsertMenu () {
+    // Identitas
     char phone [50];
     do {
         printf("\n Nomor Telepon harus 10-13 karakter dan numerik\n");
@@ -314,13 +321,42 @@ void InsertMenu () {
         printf("%s (i) Selamat datang kembali, %s %s\n", GREEN, curr->name, RESET);
     }
 
+    // Order Minuman
     while (true) {
+        refreshPoints(curr);
+        int free = curr->points / 25;
+        printf("Kamu punya %d bonus minuman tersisa\n", free);
+        
         char drink[50];
         do {
-            printf("Cafe Latte | Caramel Macchiato | Cappuccino | Cafe Mocha\n");
+            printf("\nCafe Latte | Caramel Macchiato | Cappuccino | Cafe Mocha\n");
             printf("Input Drink: ");
             scanf(" %[^\n]", drink);
         } while (!isDrink(drink));
+
+        char input[5];
+        do {
+            printf("\nKamu punya %d bonus minuman tersisa (%d poin)\n", free, curr->points);
+            printf("Ingin menggunakan 25 poin untuk bonus minuman? [Y/N]: ");
+            scanf(" %[^\n]", input);
+        } while (strcmpi(input, "Y") != 0 && strcmpi(input, "N") != 0);
+
+        if (strcmpi(input, "Y") == 0) {
+            curr->points -= 25;
+            printf("%s (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
+        } else {
+            printf("%s (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
+        }
+
+        // Validasi End
+        do {
+            printf("Apakah Anda ingin memesan lagi? [Y/N]: ");
+            scanf(" %[^\n]", input);
+        } while (strcmpi(input, "Y") != 0 && strcmpi(input, "N") != 0);
+
+        if (strcmpi(input, "N") == 0) {
+            break;
+        }
     }
 
     printf("Press enter to continue..."); getchar();
