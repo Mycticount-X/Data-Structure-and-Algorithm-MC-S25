@@ -203,6 +203,7 @@ void refreshPoints(Customer* curr) {
 // Prototype Function
 void Menu();
 void InsertMenu();
+void OrderMenu();
 void ViewMenu();
 void DeleteMenu();
 void ExitMenu();
@@ -332,6 +333,7 @@ void InsertMenu () {
         curr = Search(core, phone); 
 
         if (curr == NULL) { 
+            // Tes bug
             printf("%s\n (i) ERROR: Gagal menambahkan pelanggan!%s\n", RED, RESET);
             return;
         } else {
@@ -342,30 +344,48 @@ void InsertMenu () {
     }
 
     // Order Minuman
+    OrderMenu(curr);
+
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n'); 
+}
+
+void OrderMenu (Customer* curr) {
+    refreshPoints(curr);
+    int free = curr->points / 25;
+
     while (true) {
-        refreshPoints(curr);
-        int free = curr->points / 25;
-        printf("Kamu punya %d bonus minuman tersisa\n", free);
-        
+        // Saya mengganti urutannya jadi
+        // Order dulu lalu Tanya Mau pakai Bonus atau tidak
         char drink[50];
         do {
             printf("\nCafe Latte | Caramel Macchiato | Cappuccino | Cafe Mocha\n");
             printf("Input Drink: ");
             scanf(" %[^\n]", drink);
         } while (!isDrink(drink));
+        
+        int quantity;
+        do {
+            printf("Masukan jumlah minuman: ");
+            scanf("%d", &quantity);
+        } while (quantity < 1);
 
         char input[5];
-        do {
-            printf("\nKamu punya %d bonus minuman tersisa (%d poin)\n", free, curr->points);
-            printf("Ingin menggunakan 25 poin untuk bonus minuman? [Y/N]: ");
-            scanf(" %[^\n]", input);
-        } while (strcmpi(input, "Y") != 0 && strcmpi(input, "N") != 0);
+        if (free) {
+            do {
+                printf("\nKamu punya %d bonus minuman tersisa (%d poin)\n", free, curr->points);
+                printf("Ingin menggunakan 25 poin untuk bonus minuman? [Y/N]: ");
+                scanf(" %[^\n]", input);
+            } while (strcmpi(input, "Y") != 0 && strcmpi(input, "N") != 0);
 
-        if (strcmpi(input, "Y") == 0) {
-            curr->points -= 25;
-            printf("%s\n (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
+    
+            if (strcmpi(input, "Y") == 0) {
+                curr->points -= 25;
+                printf("%s\n (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
+            }
+            printf("%s\n (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
         }
-        printf("%s\n (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
+
 
         // Validasi End
         do {
@@ -377,9 +397,6 @@ void InsertMenu () {
             break;
         }
     }
-
-    printf("Press enter to continue..."); getchar();
-    while (getchar() != '\n'); 
 }
 
 void ViewMenu () {
