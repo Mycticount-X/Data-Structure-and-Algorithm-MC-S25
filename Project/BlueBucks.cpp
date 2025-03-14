@@ -59,8 +59,7 @@ Customer *minCustomer(Customer *root) {
 // Tree Function
 Customer* Generate (Customer* curr, char name[], char phone[], char email[], int points, int spend) {
     if (curr == NULL) {
-        core = CreateCustomer(name, phone, email, points, spend);
-        return core;
+        return CreateCustomer(name, phone, email, points, spend);
     }
 
     if (strcmp(curr->phone, phone) > 0) {
@@ -71,6 +70,8 @@ Customer* Generate (Customer* curr, char name[], char phone[], char email[], int
         // Validasi Duplikat
         return NULL;
     }
+
+    return NULL;
 }
 
 Customer* Delete (Customer* curr, char name[], char phone[], char email[], int points, int spend) {
@@ -164,7 +165,7 @@ bool isEmail(char email[]) {
     int len = strlen(email);
     if (len < 10 || len > 20) return false;
 
-    int at = -1, dot = -1;
+    int at = -1, dot = -1; // @ dan .
     int at_count = 0;
 
     for (int i = 0; i < len; i++) {
@@ -180,6 +181,7 @@ bool isEmail(char email[]) {
 
     if (dot <= at) return false;
 
+    
     if (strcmp(email + dot, ".com") == 0 || strcmp(email + dot, ".co.id") == 0) {
         return true;
     }
@@ -208,6 +210,7 @@ void DeleteMenu();
 void ExitMenu();
 
 int main () {
+    Menu ();
     return 0;
 }
 
@@ -305,31 +308,31 @@ void InsertMenu () {
     // Identitas
     char phone [50];
     do {
-        printf("\n Nomor Telepon harus 10-13 karakter dan numerik\n");
+        printf("\n%s(i) Nomor Telepon harus 10-13 karakter dan numerik%s\n", YELLOW, RESET);
         printf("Input Nomor Telepon: ");
         scanf(" %[^\n]", phone);
     } while (strlen(phone) < 10 || strlen(phone) > 13 || !isNum(phone));
 
     char name[50];
     do {
-        printf("\n Nama harus 3-25 karakter dan di awali Mr./Mrs.\n");
+        printf("\n%s(i) Nama harus 3-25 karakter dan di awali Mr./Mrs.%s\n", YELLOW, RESET);
         printf("Input Name: ");
         scanf(" %[^\n]", name);
     } while (strlen(name) < 5 || strlen(name) > 25 || !isPerson(name));
     
     char email[50];
     do {
-        printf("\n Email harus 10-20 karakter dan sesuai format email\n");
+        printf("\n%s(i) Email harus 10-20 karakter dan sesuai format email%s\n", YELLOW, RESET);
         printf("Input Email: ");
         scanf(" %[^\n]", email);
-    } while (strlen(name) < 10 || strlen(name) > 20 || isEmail(email));
+    } while (!isEmail(email));
 
     Customer* curr = Search(core, phone);
     if (curr == NULL) {
         Generate(core, name, phone, email, 0, 0);
-        printf("%s (i) Customer berhasil ditambahkan%s\n", GREEN, RESET);
+        printf("%s\n (i) Customer berhasil ditambahkan%s\n", GREEN, RESET);
     } else {
-        printf("%s (i) Selamat datang kembali, %s %s\n", GREEN, curr->name, RESET);
+        printf("%s\n (i) Selamat datang kembali, %s %s\n", GREEN, curr->name, RESET);
     }
 
     // Order Minuman
@@ -354,9 +357,9 @@ void InsertMenu () {
 
         if (strcmpi(input, "Y") == 0) {
             curr->points -= 25;
-            printf("%s (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
+            printf("%s\n (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
         }
-        printf("%s (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
+        printf("%s\n (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
 
         // Validasi End
         do {
