@@ -351,10 +351,10 @@ void InsertMenu () {
 }
 
 void OrderMenu (Customer* curr) {
-    refreshPoints(curr);
-    int free = curr->points / 25;
-
     while (true) {
+        refreshPoints(curr);
+        int free = curr->points / 25;
+
         // Saya mengganti urutannya jadi
         // Order dulu lalu Tanya Mau pakai Bonus atau tidak
         char drink[50];
@@ -364,12 +364,14 @@ void OrderMenu (Customer* curr) {
             scanf(" %[^\n]", drink);
         } while (!isDrink(drink));
         
+        // Input Quantity
         int quantity;
         do {
             printf("Masukan jumlah minuman: ");
             scanf("%d", &quantity);
         } while (quantity < 1);
 
+        // Validasi Bonus
         char input[5];
         if (free) {
             do {
@@ -378,13 +380,42 @@ void OrderMenu (Customer* curr) {
                 scanf(" %[^\n]", input);
             } while (strcmpi(input, "Y") != 0 && strcmpi(input, "N") != 0);
 
-    
+            int bonus;
             if (strcmpi(input, "Y") == 0) {
-                curr->points -= 25;
+                do {
+                    printf("Poin: %d\n", curr->points);
+                    printf("Masukan jumlah poin untuk ditukar [25 poin / bonus]: ");
+                    scanf("%d", &bonus);
+                    
+                    if (bonus/25 > free) {
+                        printf("%s\n (i) Bonus minuman tidak mencukupi%s\n", RED, RESET);
+                    }
+                } while (bonus < 25 && bonus % 25 != 0);
+
+                // Bonus vs Pesanan
+                int amount = bonus / 25;
+                
+                // Bonus < Pesanan
+                if (amount < quantity) {
+                    curr->spend += (quantity - bonus) * 50000;
+                    curr->points -= bonus;
+                }
+                // Bonus > Pesanan
+                else if (amount > quantity) {
+                    curr->points -= quantity * 25;
+                }
+                
+                // Bonus == Pesanan
+                else {
+                    curr->points -= bonus;
+                }
+
                 printf("%s\n (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
             }
-            printf("%s\n (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
+        } else {
+            curr->spend += quantity * 50000;
         }
+        printf("%s\n (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
 
 
         // Validasi End
