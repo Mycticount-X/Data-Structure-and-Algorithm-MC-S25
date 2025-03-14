@@ -147,15 +147,23 @@ bool isNum (char phone[]) {
 }
 
 bool isPerson (char name[]) {
-    if (strlen(name) < 3) {
-        return false;
+    if (strncmp(name, "Mr. ", 4) == 0 && strlen(name) < 25 + 4 && strlen(name) > 4) {
+        return true;
     }
 
-    if (strncmp(name, "Mr.", 3) == 0 || strncmp(name, "Mrs.", 4) == 0) {
+    if (strncmp(name, "Mrs. ", 5) == 0 && strlen(name) < 25 + 5 && strlen(name) > 5) {
         return true;
     }
 
     return false;
+}
+
+void alterPre(char *name) {
+    if (strncmp(name, "Mr. ", 4) == 0) {
+        memmove(name, name + 4, strlen(name) - 3);
+    } else if (strncmp(name, "Mrs. ", 5) == 0) {
+        memmove(name, name + 5, strlen(name) - 4);
+    }
 }
 
 bool isEmail(char email[]) {
@@ -322,10 +330,12 @@ void InsertMenu () {
     if (curr == NULL) {  // Pelanggan baru, buat baru
         char name[50];
         do {
-            printf("\n%s(i) Nama harus 3-25 karakter dan diawali Mr./Mrs.%s\n", YELLOW, RESET);
+            printf("\n%s(i) Nama harus 3-25 karakter dan diawali Mr./Mrs. (+spasi)%s\n", YELLOW, RESET);
             printf("Input Name: ");
             scanf(" %[^\n]", name);
-        } while (strlen(name) < 3 || strlen(name) > 25 || !isPerson(name));
+        } while (!isPerson(name));
+
+        alterPre(name);
 
         char email[50];
         do {
@@ -369,7 +379,7 @@ void OrderMenu (Customer* curr) {
 
         // Order minuman
         char drink[50];
-        int drink_index = -1;
+        int drink_idx = -1;
         do {
             printf("\nCafe Latte | Caramel Macchiato | Cappuccino | Cafe Mocha\n");
             printf("Input Drink: ");
@@ -377,11 +387,11 @@ void OrderMenu (Customer* curr) {
             
             for (int i = 0; i < 4; i++) {
                 if (strcmpi(drink, drinks[i]) == 0) {
-                    drink_index = i;
+                    drink_idx = i;
                     break;
                 }
             }
-        } while (drink_index == -1);
+        } while (drink_idx == -1);
 
         // Input Quantity
         int quantity;
@@ -424,12 +434,12 @@ void OrderMenu (Customer* curr) {
                 
                 tbonus_used += bonus_used;
                 curr->points -= bonus_used * 25;
-                ordercc[drink_index] += quantity;
+                ordercc[drink_idx] += quantity;
                 printf("%s\n (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
             }
 
         } else {
-            ordercc[drink_index] += quantity;
+            ordercc[drink_idx] += quantity;
             tspend += quantity * 30000;
             curr->spend += quantity * 30000;
         }
@@ -447,7 +457,7 @@ void OrderMenu (Customer* curr) {
     }
 
     // Summary
-    printf("\n== Summary Order ==\n");
+    printf("\n\n\n%s  == Summary Order ==%s\n", CYAN, RESET);
     for (int i = 0; i < 4; i++) {
         if (ordercc[i] > 0) {
             printf("%s - %d\n", drinks[i], ordercc[i]);
@@ -468,8 +478,6 @@ void OrderMenu (Customer* curr) {
     printf("Points Obtained : %d\n", bonus_obtained*3);
     printf("===================================================\n\n");
 
-    printf("Press enter to continue..."); getchar();
-    while (getchar() != '\n'); 
 }
 
 
@@ -477,7 +485,7 @@ void ViewMenu () {
     if (core == NULL) {
         printf("Tidak ada pelanggan saat ini!\n");
 
-        printf("Press enter to continue..."); getchar();
+        printf("Press enter to continue...");
         while (getchar() != '\n'); 
         return;
     }
@@ -499,20 +507,20 @@ void DeleteMenu () {
     if (core == NULL) {
         printf("Tidak ada pelanggan saat ini!\n");
 
-        printf("Press enter to continue..."); getchar();
+        printf("Press enter to continue...");
         while (getchar() != '\n'); 
         return;
     }
     
     char phone[50];
     printf("Input Nomor Telepon: ");
-    printf(" %[^\n]", phone);
+    scanf(" %[^\n]", phone);
 
     Customer* curr = Search(core, phone);
     if (curr == NULL) {
         printf("%s (i) Customer tidak ditemukan%s\n", RED, RESET);
     } else {
-        Delete(core, curr->name, curr->phone, curr->email, curr->points, curr->spend);
+        core = Delete(core, curr->name, curr->phone, curr->email, curr->points, curr->spend);
         printf("%s (i) Customer berhasil dihapus%s\n", GREEN, RESET);
     }
 
