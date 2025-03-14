@@ -200,6 +200,10 @@ void refreshPoints(Customer* curr) {
     curr->points += points;
 }
 
+void initMikhail() {
+    core = Generate(core, "Mikhail Cychael", "1234567890", "mikhailcyx@mail.com", 100, 0);
+}
+
 // Prototype Function
 void Menu();
 void InsertMenu();
@@ -209,6 +213,7 @@ void DeleteMenu();
 void ExitMenu();
 
 int main () {
+    initMikhail();
     Menu ();
     return 0;
 }
@@ -453,14 +458,14 @@ void OrderMenu (Customer* curr) {
     int total_pay = tspend - bonus_val;
 
     printf("---------------------------------------------------\n");
-    printf("Subtotal       : Rp %d\n", tspend);
-    printf("Bonus Used     : %d (Rp %d)\n", tbonus_used, bonus_val);
-    printf("Total Payment  : Rp %d\n", total_pay);
+    printf("Subtotal        : Rp %d\n", tspend);
+    printf("Bonus Used      : %d (Rp %d)\n", tbonus_used, bonus_val);
+    printf("Total Payment   : Rp %d\n", total_pay);
     
     int bonus_obtained = (total_pay / 50000) * 3;
     curr->points += bonus_obtained;
     
-    printf("Bonus Obtained : %d\n", bonus_obtained);
+    printf("Points Obtained : %d\n", bonus_obtained*3);
     printf("===================================================\n\n");
 
     printf("Press enter to continue..."); getchar();
