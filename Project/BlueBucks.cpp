@@ -391,6 +391,31 @@ void ViewMenu () {
 
     printf("=============================================================================\n\n");
 
-    printf("Press enter to continue..."); getchar();
+    printf("Press enter to continue..."); 
     while (getchar() != '\n'); 
+}
+
+void DeleteMenu () {
+    if (core == NULL) {
+        printf("Tidak ada pelanggan saat ini!\n");
+
+        printf("Press enter to continue..."); getchar();
+        while (getchar() != '\n'); 
+        return;
+    }
+    
+    char phone[50];
+    printf("Input Nomor Telepon: ");
+    printf(" %[^\n]", phone);
+
+    Customer* curr = Search(core, phone);
+    if (curr == NULL) {
+        printf("%s (i) Customer tidak ditemukan%s\n", RED, RESET);
+    } else {
+        Delete(core, curr->name, curr->phone, curr->email, curr->points, curr->spend);
+        printf("%s (i) Customer berhasil dihapus%s\n", GREEN, RESET);
+    }
+
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n');
 }
