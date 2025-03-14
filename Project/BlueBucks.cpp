@@ -126,6 +126,17 @@ Customer* Search (Customer* curr, char phone[]) {
     }
 }
 
+// Traversal Order
+void Inorder (Customer* curr) {
+    if (curr == NULL) {
+        return;
+    }
+
+    Inorder(curr->left);
+    printf("| %-25s | %-13s | %-20s | %-6d |\n", curr->name, curr->phone, curr->email, curr->points);
+    Inorder(curr->right);
+}
+
 // Helper Function
 bool isNum (char phone[]) {
     int len = strlen(phone);
@@ -311,7 +322,7 @@ void InsertMenu () {
         printf("\n Email harus 10-20 karakter dan sesuai format email\n");
         printf("Input Email: ");
         scanf(" %[^\n]", email);
-    } while (isEmail(email));
+    } while (strlen(name) < 10 || strlen(name) > 20 || isEmail(email));
 
     Customer* curr = Search(core, phone);
     if (curr == NULL) {
@@ -344,9 +355,8 @@ void InsertMenu () {
         if (strcmpi(input, "Y") == 0) {
             curr->points -= 25;
             printf("%s (i) Bonus minuman berhasil ditambahkan%s\n", GREEN, RESET);
-        } else {
-            printf("%s (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
         }
+        printf("%s (i) Selamat menikmati minuman Anda%s\n", GREEN, RESET);
 
         // Validasi End
         do {
@@ -358,6 +368,28 @@ void InsertMenu () {
             break;
         }
     }
+
+    printf("Press enter to continue..."); getchar();
+    while (getchar() != '\n'); 
+}
+
+void ViewMenu () {
+    if (core == NULL) {
+        printf("Tidak ada pelanggan saat ini!\n");
+
+        printf("Press enter to continue..."); getchar();
+        while (getchar() != '\n'); 
+        return;
+    }
+    
+    printf("%s(i) Gunakan Full Screen untuk pengalaman terbaik!\n%s", YELLOW, RESET);
+    printf("=============================================================================\n");
+    printf("| Name                      | Phone Number  | Email                | Points |\n");
+    printf("=============================================================================\n");
+    
+    Inorder(core);
+
+    printf("=============================================================================\n\n");
 
     printf("Press enter to continue..."); getchar();
     while (getchar() != '\n'); 
