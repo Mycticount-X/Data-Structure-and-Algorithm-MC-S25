@@ -19,7 +19,7 @@
 #define WHITE   "\033[37m" 
 
 // By Michael Ahlovely Stevenson
-// BlueJack Hospital
+// Blue Bucks
 
 struct Customer {
     char name[50];
