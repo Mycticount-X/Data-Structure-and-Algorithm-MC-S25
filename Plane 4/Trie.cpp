@@ -77,6 +77,29 @@ void SearchZone (Zone* root, const char* name) {
     }
 }
 
+// Delete Command
+void DeleteZone (Zone* root, const char* name) {
+    Zone* temp = root;
+    
+    while (*name) {
+        int index = *name - 'a';
+        
+        if (!temp->children[index]) {
+            printf("Zona %s tidak ditemukan!\n", name);
+            return;
+        }
+        temp = temp->children[index];
+        name++;
+    }
+    
+    if (temp->isEoF) {
+        temp->isEoF = false;
+        printf("Zona %s berhasil dihapus!\n", name);
+    } else {
+        printf("Zona %s tidak ditemukan!\n", name);
+    }
+}
+
 // Alter Command
 void ClearPlane (Zone* root) {
     if (root == NULL) {
