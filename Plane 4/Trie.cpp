@@ -90,6 +90,25 @@ void ClearPlane (Zone* root) {
     free(root);
 }
 
+void ViewPlane (Zone* root) {
+    char word[100];
+    SupportView(root, word, 0);
+}
+
+void SupportView(Zone* root, char word[], int level) {
+    if (root->isEoF) {
+        word[level] = '\0';
+        printf("%s\n", word);
+    }
+
+    for (int i = 0; i < ALPHA_SIZE; i++) {
+        if (root->children[i]) {
+            word[level] = i + 'a';
+            SupportView(root->children[i], word, level + 1);
+        }
+    }
+}
+
 int main () {
     return 0;
 }
