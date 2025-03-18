@@ -39,7 +39,55 @@ void FruitZone (Zone* root, const char* name, int MTX) {
         name++;
     }
     
-    temp->isEoF = true;
+    if (temp->isEoF) {
+        if (temp->MTX < MTX) {
+            temp->MTX = MTX;
+            printf("Konsetrasi Myctix pada Zona %s meningkat menjadi %d!\n", name, MTX);
+        } else if (temp->MTX > MTX) {
+            temp->MTX = MTX;
+            printf("Konsetrasi Myctix pada Zona %s menurun menjadi %d!\n", name, MTX);
+        } else {
+            printf("Zona %s staknan!\n", name);
+        }
+    } else {
+        temp->isEoF = true;
+        temp->MTX = MTX;
+    }
+}
+
+// Search Command
+void SearchZone (Zone* root, const char* name) {
+    Zone* temp = root;
+    
+    while (*name) {
+        int index = *name - 'a';
+        
+        if (!temp->children[index]) {
+            printf("Zona %s tidak ditemukan!\n", name);
+            return;
+        }
+        temp = temp->children[index];
+        name++;
+    }
+    
+    if (temp->isEoF) {
+        printf("Zona %s ditemukan dengan konsetrasi Myctix %d!\n", name, temp->MTX);
+    } else {
+        printf("Zona %s tidak ditemukan!\n", name);
+    }
+}
+
+// Alter Command
+void ClearPlane (Zone* root) {
+    if (root == NULL) {
+        printf("Permukaan saat ini kosong!\n");
+        return;
+    }
+
+    for (int i = 0; i < ALPHA_SIZE; i++) {
+        ClearPlane(root->children[i]);
+    }
+    free(root);
 }
 
 int main () {
