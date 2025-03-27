@@ -86,7 +86,7 @@ Zone* CutZone (Zone* root, int MTX) {
 		else {
 			Zone* temp = minZone(root->right);
 			*root = *temp;
-			root->right = CutZone(root->right, root->MTX);
+			root->right = CutZone(root->right, temp->MTX);
 		}
 		
 	}
