@@ -6,6 +6,16 @@
 #include <conio.h>
 #include <windows.h>
 
+// Atribut ANSI
+#define RESET   "\033[0m"  // Buat reset akhiran
+#define RED     "\033[31m"       
+#define GREEN   "\033[32m"  
+#define YELLOW  "\033[33m"   
+#define BLUE    "\033[34m"   
+#define MAGENTA "\033[35m"   
+#define CYAN    "\033[36m"  
+#define WHITE   "\033[37m" 
+
 struct Sample {
 	int MTX;
     int age;
@@ -314,8 +324,103 @@ void ExportMyx (Sample* root) {
 }
 
 // Menu Function
+void Menu();
 
 // Main Function
 int main () {
+    Menu();
     return 0;
+}
+
+void Menu () {
+	int position = 0;
+	char input;
+	system("cls");
+	while (true) {
+		printf("%s Midgetification Vessel Management Server%s\n", CYAN, RESET);
+		printf("%s 1. Alteration Fog Tree %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. Myctix Heaven Tree %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. Help %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Exit %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < 4 - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    FogMenu();
+                    break;
+                case 1:
+                    // ViewMenu();
+                    break;
+                case 2:
+					// PopMenu();
+                    break;
+                case 3:
+					// ExitMenu();
+					break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
+}
+
+void FogMenu () {
+	int position = 0;
+	char input;
+	system("cls");
+	while (true) {
+		printf("%s Alteration Fog Tree%s\n", CYAN, RESET);
+		printf("%s 1. Add Sample %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. View Sample %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. Destroy Sample %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Export Sample to Myctix Heaven Tree %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < 5 - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    // InsertMenu();
+                    break;
+                case 1:
+                    // ViewMenu();
+                    break;
+                case 2:
+					// PopMenu();
+                    break;
+                case 3:
+					// ExitMenu();
+					break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
 }
