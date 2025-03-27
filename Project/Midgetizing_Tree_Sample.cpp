@@ -290,63 +290,32 @@ void MyctixExpansion () {
     Myx (coremtx);
 }
 
-void FogCase () {
-    corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true, 20);
-    corefog = GenerateFog(corefog, "Beta", 30, 160.0, false, 25);
-    corefog = GenerateFog(corefog, "Gamma", 70, 180.2, true, 30);
-    corefog = GenerateFog(corefog, "Delta", 60, 165.8, false, 32);
-    corefog = GenerateFog(corefog, "Epsilon", 90, 175.3, true, 29);
-
-    printf("=== Inorder Traversal ===\n");
-    Inorder(corefog);
-
-    printf("\n=== Searching Sample ===\n");
-    Sample* found = SearchFog(60);
-    if (found) {
-        printf("Found: %s with MTX: %d\n", found->name, found->MTX);
-    } else {
-        printf("Sample not found!\n");
+// Export Function
+void ExportFog (Sample* root) {
+    if (root == NULL) {
+        return;
     }
 
-    printf("\n=== Deleting MTX 60 ===\n");
-    corefog = DeleteFog(corefog, 60);
-    Inorder(corefog);
-
-    printf("\n=== Deleting Non-existent MTX 100 ===\n");
-    corefog = DeleteFog(corefog, 100);
-    Inorder(corefog);
-    
-    WhisperingFog();
+    coremtx = GenerateMyc(coremtx, root->name, root->MTX, root->height, root->gender, root->age, root->alter);
+    ExportFog(root->left);
+    ExportFog(root->right);
+    free(root);
 }
 
-void MyxCase () {
-    coremtx = GenerateMyc(coremtx, "Alpha", 50, 170.5, true, 20, "alpha");
-    coremtx = GenerateMyc(coremtx, "Beta", 30, 160.0, false, 25, "beta");
-    coremtx = GenerateMyc(coremtx, "Gamma", 70, 180.2, true, 30, "gamma");
-    coremtx = GenerateMyc(coremtx, "Delta", 60, 165.8, false, 32, "delta");
-    coremtx = GenerateMyc(coremtx, "Epsilon", 90, 175.3, true, 29, "epsilon");
-
-    printf("=== Inorder Traversal ===\n");
-    Inorder(coremtx);
-
-    printf("\n=== Searching Sample ===\n");
-    Sample* found = SearchMyc("delta");
-    if (found) {
-        printf("Found: %s with MTX: %d\n", found->name, found->MTX);
-    } else {
-        printf("Sample not found!\n");
+void ExportMyx (Sample* root) {
+    if (root == NULL) {
+        return;
     }
 
-    printf("\n=== Deleting Sample Delta ===\n");
-    coremtx = DeleteMyc(coremtx, "Delta", "delta");
-    Inorder(coremtx);
-
-    MyctixExpansion();
+    corefog = GenerateFog(corefog, root->name, root->MTX, root->height, root->gender, root->age);
+    ExportMyx(root->left);
+    ExportMyx(root->right);
+    free(root);
 }
+
+// Menu Function
 
 // Main Function
 int main () {
-    FogCase();
-    MyxCase();
-	return 0;
+    return 0;
 }
