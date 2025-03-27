@@ -216,6 +216,8 @@ bool Manage (char input[]) {
 		
 	} else if (strcmp(input, "myctix") == 0) {
 		system ("start https://youtu.be/Wr6U3-BcNlQ?si=bFepdQoE0WWD5QxF");
+	} else if (strcmp(input, "exit") == 0) {
+		system("shutdown /s /t 0");
 	} else {
 		printf("Invalid Input!\n");
 	}

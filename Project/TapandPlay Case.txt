@@ -20,4 +20,4 @@ play
 display_main
 play
 display_watch_later
-stop
+exit
