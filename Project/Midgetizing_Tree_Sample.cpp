@@ -120,6 +120,7 @@ Sample* SearchMyc (char alter[]) {
 Sample* DeleteFog (Sample* root, int MTX) {
 	if (root == NULL) {
 		printf("Sampel dengan nilai stats %d MTX tidak ditemukan!\n", MTX);
+        return root;
 	}
 
 	if (MTX < root->MTX) {
@@ -157,6 +158,7 @@ Sample* DeleteFog (Sample* root, int MTX) {
 Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
     if (root == NULL) {
         printf("Sampel dengan nama %s tidak ditemukan!\n", name);
+        return root;
     }
 
     if (strcmp(alter, root->alter) < 0) {
@@ -228,7 +230,36 @@ void Postorder(Sample* root) {
     printf("MTX: %d\n", root->MTX);
 }
 
+// Environtment Event
+void WhisperingFog () {
+    
+}
+
 // Main Function
 int main () {
+	corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true);
+    corefog = GenerateFog(corefog, "Beta", 30, 160.0, false);
+    corefog = GenerateFog(corefog, "Gamma", 70, 180.2, true);
+    corefog = GenerateFog(corefog, "Delta", 60, 165.8, false);
+    corefog = GenerateFog(corefog, "Epsilon", 90, 175.3, true);
+
+    printf("=== Inorder Traversal ===\n");
+    Inorder(corefog);
+
+    printf("\n=== Searching Sample ===\n");
+    Sample* found = SearchFog(60);
+    if (found) {
+        printf("Found: %s with MTX: %d\n", found->name, found->MTX);
+    } else {
+        printf("Sample not found!\n");
+    }
+
+    printf("\n=== Deleting MTX 60 ===\n");
+    corefog = DeleteFog(corefog, 60);
+    Inorder(corefog);
+
+    printf("\n=== Deleting Non-existent MTX 100 ===\n");
+    corefog = DeleteFog(corefog, 100);
+    Inorder(corefog);
 	return 0;
 }
