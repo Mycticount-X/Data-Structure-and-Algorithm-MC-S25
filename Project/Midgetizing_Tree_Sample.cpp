@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
 
 struct Sample {
 	int MTX;
@@ -231,8 +234,39 @@ void Postorder(Sample* root) {
 }
 
 // Environtment Event
+bool gacha (int MTX, int height) {
+    double chance = 30.0;
+    double mtxf = 100.0 / ((MTX < 1) ? 1 : MTX);
+    double heightf = 1000.0 / ((height < 1) ? 1 : height);
+    chance += mtxf + heightf;
+    if (chance > 100) chance = 100;
+    return (rand() % 100) < chance;
+}
+
+void Fog (Sample* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    Sleep(20);
+    Fog(root->left);
+    Fog(root->right);
+
+    if (gacha(root->MTX, root->height)) {
+        root->gender = !root->gender;
+        printf("Sample %s terkena efek Whispering Fog! Gender berubah menjadi %s.\n", 
+               root->name, root->gender ? "Male" : "Female");
+    }
+}
+
 void WhisperingFog () {
-    
+    if (corefog == NULL) {
+        printf("Plane is Empty!\n");
+        return;
+    }
+
+    printf("Whispering Fog segera tiba!\n");
+    Fog (corefog);
 }
 
 // Main Function
