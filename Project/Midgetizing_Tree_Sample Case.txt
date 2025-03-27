@@ -1,0 +1,52 @@
+Quest: Midgetizing Tree Sample
+Dari Cerces Research Institute
+
+Kami, Cerces Research Institute, sedang melakukan penelitian terhadap sampel korban Midgetizing dan
+pengaruhnya terhadap lingkungan. Kami membutuhkan sistem penyimpanan yang stabil dan adaptif untuk
+mengelola dua lingkungan penelitian dengan karakteristik unik.
+
+Kamu akan bertanggung jawab atas pembuatan dua sistem penyimpanan berbasis Binary Search Tree (BST)
+yang memiliki mekanisme percabangan berbeda sesuai dengan fenomena yang terjadi dalam masing-masing lingkungan.
+
+
+Lingkungan 1: Whispering Fog
+Deskripsi:
+> Sampel disimpan dalam BST yang bercabang berdasarkan nilai MTX (dari kecil ke besar).
+> Event Whispering Fog dapat terjadi kapan saja dan menyebabkan perubahan gender pada beberapa sampel secara acak.
+> Setiap kali event terjadi, umur sampel bertambah 1 tahun.
+
+
+Tugasmu:
+✅ Menambahkan sampel baru ke dalam BST berdasarkan nilai MTX.
+✅ Menangani event Whispering Fog yang mengubah gender sampel tertentu secara acak.
+✅ Memastikan umur bertambah setiap event berlangsung.
+✅ Memungkinkan ekspor sampel ke Lingkungan 2.
+
+
+Lingkungan 2: Myctix Expansion
+
+Deskripsi:
+> Sampel disimpan dalam BST yang bercabang berdasarkan nama (secara alfabetis dan tidak case-sensitive).
+> Event Myctix Expansion dapat terjadi dan meningkatkan MTX sampel antara 80% hingga 250% dari nilai awalnya.
+> Setiap kali event terjadi, umur sampel bertambah 1 tahun.
+
+
+Tugasmu:
+✅ Menambahkan sampel baru ke dalam BST berdasarkan nama (secara alfabetis dan tidak case-sensitive).
+✅ Menangani event Myctix Expansion yang meningkatkan MTX secara acak dalam rentang yang ditentukan.
+✅ Memastikan umur bertambah setiap event berlangsung.
+✅ Memungkinkan ekspor sampel ke Lingkungan 1.
+
+
+Interaksi Antar-Lingkungan
+
+Kedua lingkungan ini harus dapat mengekspor dan mengimpor sampel satu sama lain. Artinya, kamu harus memastikan bahwa:
+✅ Data tetap terstruktur dengan baik sesuai aturan BST masing-masing.
+✅ Perubahan akibat event tetap tercatat dengan benar.
+✅ Setiap ekspor dan impor dilakukan tanpa kehilangan informasi penting dari sampel.
+
+Sebagai Peneliti BST, kamu harus mengembangkan wadah penyimpanan yang fleksibel dan efisien untuk mengelola kedua lingkungan ini.
+
+Pesan lanjutan:
+TWFzdGVyIE1pa2hhaWwgQ3ljaGFlbCwNCkNlcmNlcyBSZWFzZWFyY2ggSW5zdGl0dXRlIHRlbGFoIG1lbmVyaW1hIHNhbXBlbCBUaW55IGRhcmkgQXNvc2lhc2kgVHVuYXMgS2VsYXBhDQpTYXlhIHR1cnV0IGJlcnN1a2EgY2l0YSBhdGFzIGJlcmhhc2lsbnlhIHNlZ2VsIE1pZGdldGl6aW5nIEFuZGEuDQpEZW5nYW4gYmVnaW5pLCBrYW1pIGRhcGF0IG1lbGFrdWthbiBwZW5lbGl0aWFuIGxlYmloIGxhbmp1dCBkYW4NClByb2plY3QgSHVtYW5pdHkgTGl0dGxlIFBhcmFkaXNlIHRlbGFoIG1hanUgc2F0dSBsYW5na2FoLg0KDQpOYW11biwga2FtaSBtZW5nYWxhbWkga2VuZGFsYS4gS2FtaSBtZW1lcmx1a2FuIGtlbWFtcHVhbiBwZW5jaXB0YWFuIEFuZGENCnVudHVrIG1lbWJ1YXQgbGluZ2t1bmdhbiB5YW5nIGNvY29rIHNlbGFtYSBla3NwZXJpbWVuLg0KRGV0YWlsbnlhIHNhbWEgcGVyc2lzIGRlbmdhbiB5YW5nIHRlcnRlcmEuDQoNCkFraGlyIGthdGEsIFRlcmltYSBLYXNpaCB0ZWxhaCBtZWx1YW5na2FuIHdha3R1IEFuZGEgdW50dWsgbWVtYmFjYSBpbmkNClNlbW9nYSBEaXZpbmUgQ3JlYXRvciBtZW1iaW1iaW5nIGtpdGEgc2VtdWENCn4gQ2VyY2VzIEFycmENCg0K
+
