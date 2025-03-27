@@ -87,13 +87,14 @@ Sample* GenerateMyc (Sample* root, char name[], int MTX, double height, bool gen
 
 // Search Command
 Sample* SearchFog (int MTX) {
-    while (corefog != NULL) {
-        if (MTX == corefog->MTX) {
-            return corefog;
-        } else if (MTX < corefog->MTX) {
-            corefog = corefog->left;
+    Sample* curr = corefog;
+    while (curr != NULL) {
+        if (MTX == curr->MTX) {
+            return curr;
+        } else if (MTX < curr->MTX) {
+            curr = curr->left;
         } else {
-            corefog = corefog->right;
+            curr = curr->right;
         }
     }
 
@@ -101,13 +102,14 @@ Sample* SearchFog (int MTX) {
 }
 
 Sample* SearchMyc (char alter[]) {
-    while (coremtx != NULL) {
-        if (strcmp(alter, coremtx->alter) == 0) {
-            return coremtx;
-        } else if (strcmp(alter, coremtx->alter) < 0) {
-            coremtx = coremtx->left;
+    Sample* curr = coremtx;
+    while (curr != NULL) {
+        if (strcmp(alter, curr->alter) == 0) {
+            return curr;
+        } else if (strcmp(alter, curr->alter) < 0) {
+            curr = curr->left;
         } else {
-            coremtx = coremtx->right;
+            curr = curr->right;
         }
     }
 
@@ -125,18 +127,26 @@ Sample* DeleteFog (Sample* root, int MTX) {
 	} else if (MTX > root->MTX) {
 		root->right = DeleteFog(root->right, MTX);
 	} else {
-		if ((root->left == NULL) || (root->right = NULL)) {
+		if ((root->left == NULL) || (root->right == NULL)) {
 			Sample* temp = root->left ? root->left : root->right;
 			if (temp == NULL) {
 				temp = root;
 				root = NULL;
 			} else {
-				*root = *temp;
+				root->MTX = temp->MTX;
+                root->height = temp->height;
+                strcpy(root->name, temp->name);
+                strcpy(root->alter, temp->alter);
+                root->gender = temp->gender;
 			}
 			free(temp);
 		} else {
 			Sample* temp = minSample(root->right);
-			*root = *temp;
+			root->MTX = temp->MTX;
+            root->height = temp->height;
+            strcpy(root->name, temp->name);
+            strcpy(root->alter, temp->alter);
+            root->gender = temp->gender;
 			root->right = DeleteFog(root->right, temp->MTX);
 		}
 	}
@@ -154,7 +164,7 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
     } else if (strcmp(alter, root->alter) > 0) {
         root->right = DeleteMyc(root->right, name, alter);
     } else {
-        if ((root->left == NULL) || (root->right = NULL)) {
+        if ((root->left == NULL) || (root->right == NULL)) {
             Sample* temp = root->left ? root->left : root->right;
             if (temp == NULL) {
                 temp = root;
