@@ -40,7 +40,15 @@ Sample* Create (char name[], int MTX, double height, bool gender) {
     return sample;
 }
 
-// Generate Function
+Sample* minSample (Sample* root) {
+	Sample* curr = root;
+	while (curr->left) {
+		curr = curr->left;
+	}
+	return curr;
+}
+
+// Generate Command
 Sample* GenerateFog (Sample* root, char name[], int MTX, double height, bool gender) {
     if (root == NULL) {
         root = Create(name, MTX, height, gender);
@@ -77,7 +85,7 @@ Sample* GenerateMyc (Sample* root, char name[], int MTX, double height, bool gen
     return root;
 }
 
-// Search Function
+// Search Command
 Sample* SearchFog (int MTX) {
     while (corefog != NULL) {
         if (MTX == corefog->MTX) {
@@ -88,6 +96,8 @@ Sample* SearchFog (int MTX) {
             corefog = corefog->right;
         }
     }
+
+    return NULL;
 }
 
 Sample* SearchMyc (char alter[]) {
@@ -100,7 +110,69 @@ Sample* SearchMyc (char alter[]) {
             coremtx = coremtx->right;
         }
     }
+
+    return NULL;
 }
+
+// Delete Command
+Sample* DeleteFog (Sample* root, int MTX) {
+	if (root == NULL) {
+		printf("Sampel dengan nilai stats %d MTX tidak ditemukan!\n", MTX);
+	}
+
+	if (MTX < root->MTX) {
+		root->left = DeleteFog(root->left, MTX);
+	} else if (MTX > root->MTX) {
+		root->right = DeleteFog(root->right, MTX);
+	} else {
+		if ((root->left == NULL) || (root->right = NULL)) {
+			Sample* temp = root->left ? root->left : root->right;
+			if (temp == NULL) {
+				temp = root;
+				root = NULL;
+			} else {
+				*root = *temp;
+			}
+			free(temp);
+		} else {
+			Sample* temp = minSample(root->right);
+			*root = *temp;
+			root->right = DeleteFog(root->right, temp->MTX);
+		}
+	}
+	
+	return root;
+}
+
+Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
+    if (root == NULL) {
+        printf("Sampel dengan nama %s tidak ditemukan!\n", name);
+    }
+
+    if (strcmp(alter, root->alter) < 0) {
+        root->left = DeleteMyc(root->left, name, alter);
+    } else if (strcmp(alter, root->alter) > 0) {
+        root->right = DeleteMyc(root->right, name, alter);
+    } else {
+        if ((root->left == NULL) || (root->right = NULL)) {
+            Sample* temp = root->left ? root->left : root->right;
+            if (temp == NULL) {
+                temp = root;
+                root = NULL;
+            } else {
+                *root = *temp;
+            }
+            free(temp);
+        } else {
+            Sample* temp = minSample(root->right);
+            *root = *temp;
+            root->right = DeleteMyc(root->right, temp->name, temp->alter);
+        }
+    }
+    
+    return root;
+}
+
 
 int main () {
 	return 0;
