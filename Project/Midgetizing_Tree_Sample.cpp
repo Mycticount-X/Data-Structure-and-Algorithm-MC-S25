@@ -108,6 +108,7 @@ Sample* SearchFog (int MTX) {
 
 Sample* SearchMyc (char alter[]) {
     Sample* curr = coremtx;
+    alterlower(alter);
     while (curr != NULL) {
         if (strcmp(alter, curr->alter) == 0) {
             return curr;
@@ -139,20 +140,12 @@ Sample* DeleteFog (Sample* root, int MTX) {
 				temp = root;
 				root = NULL;
 			} else {
-				root->MTX = temp->MTX;
-                root->height = temp->height;
-                strcpy(root->name, temp->name);
-                strcpy(root->alter, temp->alter);
-                root->gender = temp->gender;
+				*root = *temp;
 			}
 			free(temp);
 		} else {
 			Sample* temp = minSample(root->right);
-			root->MTX = temp->MTX;
-            root->height = temp->height;
-            strcpy(root->name, temp->name);
-            strcpy(root->alter, temp->alter);
-            root->gender = temp->gender;
+			*root = *temp;
 			root->right = DeleteFog(root->right, temp->MTX);
 		}
 	}
@@ -177,20 +170,12 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
                 temp = root;
                 root = NULL;
             } else {
-                root->MTX = temp->MTX;
-                root->height = temp->height;
-                strcpy(root->name, temp->name);
-                strcpy(root->alter, temp->alter);
-                root->gender = temp->gender;
+                *root = *temp;
             }
             free(temp);
         } else {
             Sample* temp = minSample(root->right);
-            root->MTX = temp->MTX;
-            root->height = temp->height;
-            strcpy(root->name, temp->name);
-            strcpy(root->alter, temp->alter);
-            root->gender = temp->gender;
+            *root = *temp;
             root->right = DeleteMyc(root->right, temp->name, temp->alter);
         }
     }
@@ -276,11 +261,37 @@ void WhisperingFog () {
     Fog (corefog);
 }
 
+void Myx (Sample* root) {
+	if (root == NULL) {
+		return;
+	}
+	
+	Sleep(20);
+    Myx(root->left);
+    Myx(root->right);
 
+    root->age++;
+    int range = rand() % 18 + 8;
+    root->MTX *= (1+range/10);
+    printf("Sample %s terkena efek Myctix Expansion!\n", root->name);
+    printf("MTX meingkat %d%%!\n", range*10);
+    printf("MTX: %d\n", root->MTX);
+}
 
-// Main Function
-int main () {
-	corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true, 20);
+void MyctixExpansion () {
+    if (coremtx == NULL) {
+        printf("Plane is Empty!\n");
+        return;
+    }
+
+    printf("Myctix Expansion is coming!\n");
+    srand(time(NULL));
+    Sleep(200);
+    Myx (coremtx);
+}
+
+void FogCase () {
+    corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true, 20);
     corefog = GenerateFog(corefog, "Beta", 30, 160.0, false, 25);
     corefog = GenerateFog(corefog, "Gamma", 70, 180.2, true, 30);
     corefog = GenerateFog(corefog, "Delta", 60, 165.8, false, 32);
@@ -306,5 +317,36 @@ int main () {
     Inorder(corefog);
     
     WhisperingFog();
+}
+
+void MyxCase () {
+    coremtx = GenerateMyc(coremtx, "Alpha", 50, 170.5, true, 20, "alpha");
+    coremtx = GenerateMyc(coremtx, "Beta", 30, 160.0, false, 25, "beta");
+    coremtx = GenerateMyc(coremtx, "Gamma", 70, 180.2, true, 30, "gamma");
+    coremtx = GenerateMyc(coremtx, "Delta", 60, 165.8, false, 32, "delta");
+    coremtx = GenerateMyc(coremtx, "Epsilon", 90, 175.3, true, 29, "epsilon");
+
+    printf("=== Inorder Traversal ===\n");
+    Inorder(coremtx);
+
+    printf("\n=== Searching Sample ===\n");
+    Sample* found = SearchMyc("delta");
+    if (found) {
+        printf("Found: %s with MTX: %d\n", found->name, found->MTX);
+    } else {
+        printf("Sample not found!\n");
+    }
+
+    printf("\n=== Deleting Sample Delta ===\n");
+    coremtx = DeleteMyc(coremtx, "Delta", "delta");
+    Inorder(coremtx);
+
+    MyctixExpansion();
+}
+
+// Main Function
+int main () {
+    FogCase();
+    MyxCase();
 	return 0;
 }
