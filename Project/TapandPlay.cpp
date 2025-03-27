@@ -214,6 +214,8 @@ bool Manage (char input[]) {
 		ClearPlane();
 		return true;
 		
+	} else if (strcmp(input, "myctix") == 0) {
+		system ("start https://youtu.be/Wr6U3-BcNlQ?si=bFepdQoE0WWD5QxF");
 	} else {
 		printf("Invalid Input!\n");
 	}
