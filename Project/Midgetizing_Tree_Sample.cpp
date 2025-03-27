@@ -236,15 +236,6 @@ void Postorder(Sample* root) {
 }
 
 // Environtment Event
-bool gacha (int MTX, int height) {
-    double chance = 30.0;
-    double mtxf = 100.0 / ((MTX < 1) ? 1 : MTX);
-    double heightf = 1000.0 / ((height < 1) ? 1 : height);
-    chance += mtxf + heightf;
-    if (chance > 100) chance = 100;
-    return (rand() % 100) < chance;
-}
-
 bool gacha(int MTX, int height) {
     if (MTX <= 0 || height <= 0) {
         return true;
@@ -285,6 +276,8 @@ void WhisperingFog () {
     Fog (corefog);
 }
 
+
+
 // Main Function
 int main () {
 	corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true, 20);
@@ -311,5 +304,7 @@ int main () {
     printf("\n=== Deleting Non-existent MTX 100 ===\n");
     corefog = DeleteFog(corefog, 100);
     Inorder(corefog);
+    
+    WhisperingFog();
 	return 0;
 }
