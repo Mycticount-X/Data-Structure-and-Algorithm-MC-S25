@@ -61,7 +61,7 @@ Sample* GenerateFog (Sample* root, char name[], int MTX, double height, bool gen
         root->right = GenerateFog(root->right, name, MTX, height, gender);
     } else {
         // Duplicate = Extra Midgetize
-        MTX--;
+        MTX = (MTX < 0) ? 0 : MTX - 1;
         root->left = GenerateFog(root->left, name, MTX, height, gender);
     }
 
@@ -170,12 +170,20 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
                 temp = root;
                 root = NULL;
             } else {
-                *root = *temp;
+                root->MTX = temp->MTX;
+                root->height = temp->height;
+                strcpy(root->name, temp->name);
+                strcpy(root->alter, temp->alter);
+                root->gender = temp->gender;
             }
             free(temp);
         } else {
             Sample* temp = minSample(root->right);
-            *root = *temp;
+            root->MTX = temp->MTX;
+            root->height = temp->height;
+            strcpy(root->name, temp->name);
+            strcpy(root->alter, temp->alter);
+            root->gender = temp->gender;
             root->right = DeleteMyc(root->right, temp->name, temp->alter);
         }
     }
@@ -183,7 +191,44 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
     return root;
 }
 
+// Traversal Command
+void Preorder (Sample* root) {
+    if (root == NULL) {
+        return;
+    }
+    
+    printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
+    printf("Height: %.2lf mm", root->height);
+    printf("MTX: %d\n", root->MTX);
+    Preorder(root->left);
+    Preorder(root->right);
+}
 
+void Inorder(Sample* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    Inorder(root->left);
+    printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
+    printf("Height: %.2lf mm\n", root->height);
+    printf("MTX: %d\n", root->MTX);
+    Inorder(root->right);
+}
+
+void Postorder(Sample* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    Postorder(root->left);
+    Postorder(root->right);
+    printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
+    printf("Height: %.2lf mm\n", root->height);
+    printf("MTX: %d\n", root->MTX);
+}
+
+// Main Function
 int main () {
 	return 0;
 }
