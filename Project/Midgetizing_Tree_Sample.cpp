@@ -8,6 +8,7 @@
 
 struct Sample {
 	int MTX;
+    int age;
 	double height;
 	char name[100];
 	char alter[100];
@@ -28,10 +29,11 @@ void alterlower (char name[]) {
     }
 }
 
-Sample* Create (char name[], int MTX, double height, bool gender) {
+Sample* Create (char name[], int MTX, double height, bool gender, int age) {
     Sample* sample = (Sample*)malloc(sizeof(Sample));
     sample->MTX = MTX;
     sample->height = height;
+    sample->age = age;
     
     strcpy(sample->name, name);
     strcpy(sample->alter, name);
@@ -52,35 +54,35 @@ Sample* minSample (Sample* root) {
 }
 
 // Generate Command
-Sample* GenerateFog (Sample* root, char name[], int MTX, double height, bool gender) {
+Sample* GenerateFog (Sample* root, char name[], int MTX, double height, bool gender, int age) {
     if (root == NULL) {
-        root = Create(name, MTX, height, gender);
+        root = Create(name, MTX, height, gender, age);
         return root;
     }
 
     if (MTX < root->MTX) {
-        root->left = GenerateFog(root->left, name, MTX, height, gender);
+        root->left = GenerateFog(root->left, name, MTX, height, gender, age);
     } else if (MTX > root->MTX) {
-        root->right = GenerateFog(root->right, name, MTX, height, gender);
+        root->right = GenerateFog(root->right, name, MTX, height, gender, age);
     } else {
         // Duplicate = Extra Midgetize
         MTX = (MTX < 0) ? 0 : MTX - 1;
-        root->left = GenerateFog(root->left, name, MTX, height, gender);
+        root->left = GenerateFog(root->left, name, MTX, height, gender, age);
     }
 
     return root;
 }
 
-Sample* GenerateMyc (Sample* root, char name[], int MTX, double height, bool gender, char alter[]) {
+Sample* GenerateMyc (Sample* root, char name[], int MTX, double height, bool gender, int age, char alter[]) {
     if (root == NULL) {
-        root = Create(name, MTX, height, gender);
+        root = Create(name, MTX, height, gender, age);
         return root;
     }
 
     if (strcmp(alter, root->alter) < 0) {
-        root->left = GenerateMyc(root->left, name, MTX, height, gender, alter);
+        root->left = GenerateMyc(root->left, name, MTX, height, gender, age, alter);
     } else if (strcmp(alter, root->alter) > 0) {
-        root->right = GenerateMyc(root->right, name, MTX, height, gender, alter);
+        root->right = GenerateMyc(root->right, name, MTX, height, gender, age, alter);
     } else {
         printf("Duplicate Detected!\n");
     }
@@ -243,6 +245,17 @@ bool gacha (int MTX, int height) {
     return (rand() % 100) < chance;
 }
 
+bool gacha(int MTX, int height) {
+    if (MTX <= 0 || height <= 0) {
+        return true;
+    }
+    
+    const double c = 1000.0;
+    double probability = c / (MTX + height + c);
+    
+    return ((double)rand() / RAND_MAX) < probability;
+}
+
 void Fog (Sample* root) {
     if (root == NULL) {
         return;
@@ -252,10 +265,11 @@ void Fog (Sample* root) {
     Fog(root->left);
     Fog(root->right);
 
+    root->age++;
     if (gacha(root->MTX, root->height)) {
         root->gender = !root->gender;
         printf("Sample %s terkena efek Whispering Fog! Gender berubah menjadi %s.\n", 
-               root->name, root->gender ? "Male" : "Female");
+               root->name, root->gender ? "[Male]" : "[Female]");
     }
 }
 
@@ -265,17 +279,19 @@ void WhisperingFog () {
         return;
     }
 
-    printf("Whispering Fog segera tiba!\n");
+    printf("Whispering Fog is coming!\n");
+    srand(time(NULL));
+    Sleep(200);
     Fog (corefog);
 }
 
 // Main Function
 int main () {
-	corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true);
-    corefog = GenerateFog(corefog, "Beta", 30, 160.0, false);
-    corefog = GenerateFog(corefog, "Gamma", 70, 180.2, true);
-    corefog = GenerateFog(corefog, "Delta", 60, 165.8, false);
-    corefog = GenerateFog(corefog, "Epsilon", 90, 175.3, true);
+	corefog = GenerateFog(corefog, "Alpha", 50, 170.5, true, 20);
+    corefog = GenerateFog(corefog, "Beta", 30, 160.0, false, 25);
+    corefog = GenerateFog(corefog, "Gamma", 70, 180.2, true, 30);
+    corefog = GenerateFog(corefog, "Delta", 60, 165.8, false, 32);
+    corefog = GenerateFog(corefog, "Epsilon", 90, 175.3, true, 29);
 
     printf("=== Inorder Traversal ===\n");
     Inorder(corefog);
