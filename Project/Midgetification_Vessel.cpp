@@ -440,7 +440,6 @@ void FogMenu () {
 	}
 }
 
-
 void MyxMenu () {
 	int position = 0;
 	char input;
@@ -634,3 +633,107 @@ void AddMyx () {
 	while (getchar() != '\n');
 }
 
+void ViewFog () {
+    int position = 0;
+	char input;
+    bool menu = true;
+	system("cls");
+	while (true) {
+		printf("%s Choose Traversal Ordering%s\n", CYAN, RESET);
+		printf("%s 1. Preorder %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. Inorder %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. Postorder %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Cancel %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < 4 - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    Preorder(corefog);
+                    menu = false;
+                    break;
+                case 1:
+                    Inorder(corefog);
+                    menu = false;
+                    break;
+                case 2:
+					Postorder(corefog);
+                    menu = false;
+                    break;
+                case 3:
+					menu = false;
+                    break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void ViewMyx () {
+    int position = 0;
+	char input;
+    bool menu = true;
+	system("cls");
+	while (true) {
+		printf("%s Choose Traversal Ordering%s\n", CYAN, RESET);
+		printf("%s 1. Preorder %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. Inorder %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. Postorder %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Cancel %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < 4 - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    Preorder(coremtx);
+                    menu = false;
+                    break;
+                case 1:
+                    Inorder(coremtx);
+                    menu = false;
+                    break;
+                case 2:
+					Postorder(coremtx);
+                    menu = false;
+                    break;
+                case 3:
+					menu = false;
+                    break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
