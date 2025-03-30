@@ -372,7 +372,7 @@ void Menu () {
                     FogMenu();
                     break;
                 case 1:
-                    // ViewMenu();
+                    MyxMenu();
                     break;
                 case 2:
 					// PopMenu();
@@ -484,4 +484,75 @@ void MyxMenu () {
         
         system("cls");
 	}
+}
+
+void AddFog () {
+    char name[100];
+    bool gender = false;
+    char gender_input[100];
+    double height;
+    int MTX;
+    int age;
+
+    printf("Input Sample Name: ");
+    scanf(" %[^\n]", name);
+
+    while (strlen(name) < 2 && strlen(name) > 90) {
+        printf("Name must be between 2 and 90 characters!\n");
+        printf("Input Sample Name: ");
+        scanf(" %[^\n]", name);
+    }
+
+    printf("Input Sample Gender [Male/Female]: ");
+    scanf(" %[^\n]", gender_input);
+
+    while (strcmpi(gender_input, "male") != 0 || strcmpi(gender_input, "female") != 0) {
+        printf("Input Sample Gender [Male/Female]: ");
+        scanf(" %[^\n]", gender_input);
+    }
+
+    if (strcmpi(gender_input, "male") == 0) {
+        gender = true;
+    }
+
+    printf("Input Sample Height [mm]: ");
+    scanf("%lf", &height);
+
+    while (height <= 0) {
+        printf("Sample must be positive!\n");
+        printf("Input Sample Height [mm]: ");
+        scanf("%lf", &height);
+    }
+
+    if (height > 500) {
+        printf("Midgetizing Sample must be less than 500 mm!\n");
+        printf("Sample rejected!\n");
+        printf("Press enter to continue...");
+	    while (getchar() != '\n');
+        return;
+    }
+
+    printf("Input Sample MTX: ");
+    scanf("%d", &MTX);
+
+    while (MTX <= 0) {
+        printf("Sample must be positive!\n");
+        printf("Input Sample MTX: ");
+        scanf("%d", &MTX);
+    }
+
+    printf("Input Sample Age: ");
+    scanf("%d", &age);
+
+    while (age <= 0) {
+        printf("Sample must be positive!\n");
+        printf("Input Sample Age: ");
+        scanf("%d", &age);
+    }
+
+    corefog = GenerateFog(corefog, name, MTX, height, gender, age);
+    printf("Sample %s has been added to Alteration Fog Tree!\n", name);
+
+    printf("Press enter to continue...");
+	while (getchar() != '\n');
 }
