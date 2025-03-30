@@ -340,6 +340,10 @@ void FogMenu();
 void MyxMenu();
 void AddFog();
 void AddMyx();
+void ViewFog();
+void ViewMyx();
+void DestroyFog();
+void DestroyMyx();
 
 // Main Function
 int main () {
@@ -347,6 +351,7 @@ int main () {
     return 0;
 }
 
+// Main Menu
 void Menu () {
 	int position = 0;
 	char input;
@@ -393,6 +398,7 @@ void Menu () {
 	}
 }
 
+// Tree Menu
 void FogMenu () {
 	int position = 0;
 	char input;
@@ -403,7 +409,7 @@ void FogMenu () {
 		printf("%s 2. View Sample %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
 		printf("%s 3. Destroy Sample %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
 		printf("%s 4. Export Sample to Myctix Heaven Tree %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
-		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
+		printf("%s 5. Return to Main Menu %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
         printf("\nGunakan [W] dan [S] untuk Navigasi");
 		input = _getch();
 		system("cls");
@@ -421,13 +427,16 @@ void FogMenu () {
                     AddFog();
                     break;
                 case 1:
-                    // ViewMenu();
+                    ViewFog();
                     break;
                 case 2:
-					// PopMenu();
+					DestroyFog();
                     break;
                 case 3:
-					// ExitMenu();
+                    // 
+                    break;
+                case 4:
+					return;
 					break;
 				default:
 					// Buat Penanda kalo ada Error
@@ -468,13 +477,16 @@ void MyxMenu () {
                     AddMyx();
                     break;
                 case 1:
-                    // ViewMenu();
+                    ViewMyx();
                     break;
                 case 2:
-					// PopMenu();
+					DestroyMyx();
                     break;
                 case 3:
-					// ExitMenu();
+                    // 
+                    break;
+                case 4:
+					return;
 					break;
 				default:
 					// Buat Penanda kalo ada Error
@@ -487,6 +499,7 @@ void MyxMenu () {
 	}
 }
 
+// Add Menu
 void AddFog () {
     char name[100];
     bool gender = false;
@@ -633,6 +646,7 @@ void AddMyx () {
 	while (getchar() != '\n');
 }
 
+// View Menu
 void ViewFog () {
     int position = 0;
 	char input;
@@ -737,3 +751,45 @@ void ViewMyx () {
     printf("Press enter to continue...");
     while (getchar() != '\n');
 }
+
+// Destroy Menu
+void DestroyFog () {
+    int MTX;
+    printf("Input Sample MTX: ");
+    scanf("%d", &MTX);
+
+    while (MTX <= 0) {
+        printf("Sample must be positive!\n");
+        printf("Input Sample MTX: ");
+        scanf("%d", &MTX);
+    }
+
+    corefog = DeleteFog(corefog, MTX);
+    printf("Sample with MTX %d has been destroyed!\n", MTX);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void DestroyMyx () {
+    char name[100];
+    char alter[100];
+    printf("Input Sample Name: ");
+    scanf(" %[^\n]", name);
+
+    while (strlen(name) < 2 && strlen(name) > 90) {
+        printf("Name must be between 2 and 90 characters!\n");
+        printf("Input Sample Name: ");
+        scanf(" %[^\n]", name);
+    }
+
+    strcpy(alter, name);
+    alterlower(alter);
+
+    coremtx = DeleteMyc(coremtx, name, alter);
+    printf("Sample with name %s has been destroyed!\n", name);
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
