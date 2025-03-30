@@ -811,3 +811,68 @@ void ExportMyxMenu () {
     printf("Press enter to continue...");
     while (getchar() != '\n');
 }
+
+// Help Menu
+void HelpMenu () {
+    FILE* file = fopen("help.txt", "r");
+    if (file == NULL) {
+        printf("Failed to open help.txt file!\n");
+        printf("Press enter to continue...");
+        while (getchar() != '\n');
+        return;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
+
+    fclose(file);
+    printf("\nPress enter to continue...");
+    while (getchar() != '\n');
+    
+}
+
+// Exit Menu
+void ExitMenu () {
+	int position = 0;
+	char input;
+	while (true) {
+		printf(" %sAre you sure want to exit?%s\n", BLUE, RESET);
+		printf("%s 1. Yes %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. No %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		input = _getch();
+		system("cls");
+		if (input == 'w' || input == 'W') {
+			if (position > 0) {
+				position--;
+			}
+		} else if (input == 's' || input == 'S') {
+			if (position < 1) {
+				position++;
+			}
+		} else if (input == '\r') {
+			switch (position) {
+				case 0:
+					printf("Thank you for using Midgetification Vessel Management Server!\n");
+					printf("Have a nice day :)\n\n");
+					Sleep(1000);
+
+					printf("%sCreator:%s\n", MAGENTA, RESET);
+					printf("Name: Michael AS\n");
+					printf("Github: Mycticount-X\n");
+					printf("Youtube: Mycticount X\n");
+					printf("HSR: 825019617\n");
+					exit(0);
+					break;
+				case 1:
+					return;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+			}
+		}
+	}
+
+}
