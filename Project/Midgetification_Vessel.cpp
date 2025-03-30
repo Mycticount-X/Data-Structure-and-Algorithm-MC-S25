@@ -193,6 +193,17 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
     return root;
 }
 
+// Tree Height Command
+int Height (Sample* root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    int left = Height(root->left);
+    int right = Height(root->right);
+    return (left > right) ? left + 1 : right + 1;
+}
+
 // Traversal Command
 void Preorder (Sample* root) {
     if (root == NULL) {
@@ -325,6 +336,8 @@ void ExportMyx (Sample* root) {
 
 // Menu Function
 void Menu();
+void FogMenu();
+void MyxMenu();
 
 // Main Function
 int main () {
@@ -388,6 +401,54 @@ void FogMenu () {
 		printf("%s 2. View Sample %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
 		printf("%s 3. Destroy Sample %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
 		printf("%s 4. Export Sample to Myctix Heaven Tree %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
+		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
+        printf("\nGunakan [W] dan [S] untuk Navigasi");
+		input = _getch();
+		system("cls");
+        if (input == 'w' || input == 'W') {
+            if (position > 0) {
+                position--;
+            }
+        } else if (input == 's' || input == 'S') {
+            if (position < 5 - 1) {
+                position++;
+            }
+        } else if (input == '\r') {
+            switch (position) {
+                case 0:
+                    // InsertMenu();
+                    break;
+                case 1:
+                    // ViewMenu();
+                    break;
+                case 2:
+					// PopMenu();
+                    break;
+                case 3:
+					// ExitMenu();
+					break;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+            }
+        }
+        
+        system("cls");
+	}
+}
+
+
+void MyxMenu () {
+	int position = 0;
+	char input;
+	system("cls");
+	while (true) {
+		printf("%s Myctix Heaven Tree%s\n", CYAN, RESET);
+		printf("%s 1. Add Sample %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. View Sample %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		printf("%s 3. Destroy Sample %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
+		printf("%s 4. Export Sample to Alteration Fog Tree %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
 		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
         printf("\nGunakan [W] dan [S] untuk Navigasi");
 		input = _getch();
