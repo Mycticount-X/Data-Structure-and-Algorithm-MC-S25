@@ -344,6 +344,8 @@ void ViewFog();
 void ViewMyx();
 void DestroyFog();
 void DestroyMyx();
+void ExportFogMenu();
+void ExportMyxMenu();
 
 // Main Function
 int main () {
@@ -433,7 +435,7 @@ void FogMenu () {
 					DestroyFog();
                     break;
                 case 3:
-                    // 
+                    ExportFogMenu();
                     break;
                 case 4:
 					return;
@@ -483,7 +485,7 @@ void MyxMenu () {
 					DestroyMyx();
                     break;
                 case 3:
-                    // 
+                    ExportMyxMenu();
                     break;
                 case 4:
 					return;
@@ -793,3 +795,19 @@ void DestroyMyx () {
     while (getchar() != '\n');
 }
 
+// Export Menu
+void ExportFogMenu () {
+    ExportFog(corefog);
+    printf("All Sample has been exported to Myctix Heaven Tree!\n");
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
+
+void ExportMyxMenu () {
+    ExportMyx(coremtx);
+    printf("All Sample has been exported to Alteration Fog Tree!\n");
+
+    printf("Press enter to continue...");
+    while (getchar() != '\n');
+}
