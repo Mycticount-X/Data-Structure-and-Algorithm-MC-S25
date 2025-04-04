@@ -26,6 +26,13 @@ Zone* minZone (Zone* root) {
 	return curr;
 }
 
+int Height (Zone* root) {
+	if (root == NULL) return 0;
+	int l = Height(root->left);
+	int r = Height(root->right);
+	return 1 + (l > r ? l : r);
+}
+
 Zone* generate (Zone* root, int MTX) {
 	if (root == NULL) {
 		root = createZone(MTX);
@@ -176,6 +183,10 @@ int main () {
 //	ClearPlane();
 	
 	printf("\n\n");
+	
+	int h = Height(core);
+	printf("%d\n", h);
+	
 	
 	Inorder(core);
 	
