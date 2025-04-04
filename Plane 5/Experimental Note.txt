@@ -1,6 +1,0 @@
-[V] Insert
-[V] Delete
-[V] Search
-[V] Clear
-[V] View
-[V] Exp: root->MTX vs *root
