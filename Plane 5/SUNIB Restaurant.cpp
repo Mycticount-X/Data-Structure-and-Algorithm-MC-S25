@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <windows.h>
 
 // Atribut ANSI
 #define RESET   "\033[0m"  // Buat reset akhiran
@@ -110,12 +111,12 @@ void ViewPlane () {
 		return;
 	}
 	
-	printf("Waiting List:\n");
+	printf(" Waiting List:\n");
 	Customer* curr = head;
 	int cc = 1;
 	
 	while (curr) {
-		printf("%d. %s\n", cc, curr->name);
+		printf("  %d. %s\n", cc, curr->name);
 		curr = curr->next; cc++;
 	}
 	printf("\n");
@@ -123,6 +124,9 @@ void ViewPlane () {
 
 // Menu Command
 void Menu ();
+void AddMenu();
+void PopMenu(int mod);
+void ExitMenu();
 
 int main () {
 	Menu();
@@ -142,7 +146,7 @@ void Menu () {
 		printf("%s 2. Serve One %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
 		printf("%s 3. Serve All %s\n", (position == 2) ? ">>" : "  ", (position == 2) ? "<<" : "  ");
 		printf("%s 4. Dismiss Queue %s\n", (position == 3) ? ">>" : "  ", (position == 3) ? "<<" : "  ");
-		printf("%s 5. Dismiss Queue %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
+		printf("%s 5. Exit %s\n", (position == 4) ? ">>" : "  ", (position == 4) ? "<<" : "  ");
         printf("\nGunakan [W] dan [S] untuk Navigasi");
 		input = _getch();
 		system("cls");
@@ -157,16 +161,19 @@ void Menu () {
         } else if (input == '\r') {
             switch (position) {
                 case 0:
-//                    FogMenu();
+                	AddMenu();
                     break;
                 case 1:
-//                    MyxMenu();
+                    PopMenu(0);
                     break;
                 case 2:
-					// PopMenu();
+					PopMenu(1);
                     break;
                 case 3:
-					// ExitMenu();
+					PopMenu(2);
+					break;
+				case 4:
+					ExitMenu();
 					break;
 				default:
 					// Buat Penanda kalo ada Error
@@ -177,4 +184,108 @@ void Menu () {
         
         system("cls");
 	}
+}
+
+void AddMenu() {
+	printf("Input: [Membership] [Name]\n");
+	char member[100], name[100];
+	scanf("%s %[^\n]", member, name);
+	
+	int membership;
+	if (strcmpi(member, "VVIP") == 0) {
+		membership = 3;
+	} else if (strcmpi(member, "VIP") == 0) {
+		membership = 2;
+	} else if (strcmpi(member, "Member") == 0) {
+		membership = 1;
+	} else if (strcmpi(member, "Guest") == 0) {
+		membership = 0;
+	} else {
+		membership = 0;
+	}
+	
+	AddSort(name, membership);
+	
+	printf("\n");
+	switch (membership) {
+		case 3:
+			printf("Selamat datang VVIP %s! Nikmati pelayanan terbaik kami.\n", name);
+			break;
+		case 2:
+			printf("Selamat datang VIP %s! Kami siap melayani Anda.\n", name);
+			break;
+		case 1:
+			printf("Selamat datang Member %s! Terima kasih atas kepercayaan Anda.\n", name);
+			break;
+		case 0:
+			printf("Selamat datang %s! Silakan menikmati fasilitas kami.\n", name);
+			break;
+	}
+	
+	printf("Press [Enter] to continue"); getchar();
+	while (getchar() != '\n');
+}
+
+void ExitMenu () {
+	int position = 0;
+	char input;
+	while (true) {
+		printf(" %sAre you sure want to exit?%s\n", BLUE, RESET);
+		printf("%s 1. Yes %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
+		printf("%s 2. No %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
+		input = _getch();
+		system("cls");
+		if (input == 'w' || input == 'W') {
+			if (position > 0) {
+				position--;
+			}
+		} else if (input == 's' || input == 'S') {
+			if (position < 1) {
+				position++;
+			}
+		} else if (input == '\r') {
+			switch (position) {
+				case 0:
+					printf("Thank you for using SUNIB Restaurant!\n");
+					printf("Have a nice day :)\n\n");
+					Sleep(1000);
+
+					printf("%sCreator:%s\n", MAGENTA, RESET);
+					printf("Name: Michael AS\n");
+					printf("Github: Mycticount-X\n");
+					printf("Youtube: Mycticount X\n");
+					printf("HSR: 825019617\n");
+					exit(0);
+					break;
+				case 1:
+					return;
+				default:
+					// Buat Penanda kalo ada Error
+					printf("Out of Index!\n");
+					break;
+			}
+		}
+	}
+}
+
+void PopMenu (int mod) {
+	switch (mod) {
+		case 0:
+			PopHead();
+			break;
+		case 1:
+			do {
+				PopHead();
+			} while (head);
+			break;
+		case 2:
+			ClearPlane();
+			break;
+		default:
+			printf("Out of Index\n");
+			break;
+	}
+	
+	printf("Press [Enter] to continue");
+	while (getchar() != '\n');
 }
