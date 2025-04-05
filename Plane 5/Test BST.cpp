@@ -29,8 +29,8 @@ int heightBinaryTree(struct node *node){
 		return 0;
 	}
 	
-	int left = heightBinaryTree(root->left);
-	int right = heightBinaryTree(root->right);
+	int left = heightBinaryTree(node->left);
+	int right = heightBinaryTree(node->right);
 	return 1 + (left > right ? left : right);
 }
 
