@@ -203,6 +203,34 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
     return root;
 }
 
+void InitBalancedTrees() {
+    // Sample corefog (BST berdasarkan MTX)
+    const char* names_fog[] = {"Zephyr", "Luna", "Kai", "Nova", "Iris", "Orion", "Rhea"};
+    int MTX_fog[] = {40, 20, 60, 10, 30, 50, 70};
+    double height_fog[] = {150.5, 160.2, 155.8, 140.3, 165.4, 170.0, 158.1};
+    bool gender_fog[] = {true, false, true, false, true, false, true};
+    int age_fog[] = {25, 21, 29, 19, 23, 27, 31};
+
+    for (int i = 0; i < 7; i++) {
+        corefog = GenerateFog(corefog, (char*)names_fog[i], MTX_fog[i], height_fog[i], gender_fog[i], age_fog[i]);
+    }
+
+    // Sample coremtx (BST berdasarkan alter)
+    const char* names_mtx[] = {"Amber", "Blake", "Cleo", "Dante", "Eira", "Felix", "Gwen"};
+    const char* alter_mtx[] = {"amber", "blake", "cleo", "dante", "eira", "felix", "gwen"};
+    int MTX_mtx[] = {41, 22, 63, 14, 35, 56, 72};
+    double height_mtx[] = {151.1, 159.3, 154.6, 141.2, 162.0, 169.9, 157.7};
+    bool gender_mtx[] = {false, true, false, true, false, true, false};
+    int age_mtx[] = {24, 20, 28, 18, 22, 26, 30};
+
+    for (int i = 0; i < 7; i++) {
+        coremtx = GenerateMyc(coremtx, (char*)names_mtx[i], MTX_mtx[i], height_mtx[i], gender_mtx[i], age_mtx[i], (char*)alter_mtx[i]);
+    }
+
+    printf("Init Success!\n");
+}
+
+
 // Tree Height Command
 int Height (Sample* root) {
     if (root == NULL) {
@@ -221,8 +249,8 @@ void Preorder (Sample* root) {
     }
     
     printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
-    printf("Height: %.2lf mm", root->height);
-    printf("MTX: %d\n", root->MTX);
+    printf("Height: %.2lf mm\n", root->height);
+    printf("MTX: %d\n\n", root->MTX);
     Preorder(root->left);
     Preorder(root->right);
 }
@@ -235,7 +263,7 @@ void Inorder(Sample* root) {
     Inorder(root->left);
     printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
     printf("Height: %.2lf mm\n", root->height);
-    printf("MTX: %d\n", root->MTX);
+    printf("MTX: %d\n\n", root->MTX);
     Inorder(root->right);
 }
 
@@ -248,11 +276,11 @@ void Postorder(Sample* root) {
     Postorder(root->right);
     printf("%s (%s)\n", root->name, root->gender ? "Male" : "Female");
     printf("Height: %.2lf mm\n", root->height);
-    printf("MTX: %d\n", root->MTX);
+    printf("MTX: %d\n\n", root->MTX);
 }
 
 // Environtment Event
-bool gacha(int MTX, int height) {
+bool gacha(int MTX, double height) {
     if (MTX <= 0 || height <= 0) {
         return true;
     }
@@ -303,7 +331,7 @@ void Myx (Sample* root) {
 
     root->age++;
     int range = rand() % 18 + 8;
-    root->MTX *= (1+range/10);
+    root->MTX = (int)(root->MTX * (1.0 + (range / 10.0)));
     printf("Sample %s terkena efek Myctix Expansion!\n", root->name);
     printf("MTX meingkat %d%%!\n", range*10);
     printf("MTX: %d\n", root->MTX);
@@ -361,6 +389,7 @@ void ExitMenu();
 
 // Main Function
 int main () {
+	InitBalancedTrees();
     Menu();
     return 0;
 }
@@ -764,7 +793,6 @@ void ViewMyx () {
             }
         }
         
-        system("cls");
 	}
 
     printf("Press enter to continue...");
@@ -782,10 +810,13 @@ void DestroyFog () {
         printf("Input Sample MTX: ");
         scanf("%d", &MTX);
     }
-
-    corefog = DeleteFog(corefog, MTX);
-    Sample* check = SearchFog(MTX);
-    if (check == NULL) printf("Sample with MTX %d has been destroyed!\n", MTX);
+    
+	Sample* check = SearchFog(MTX);
+    if (check == NULL) printf("Sample not found\n");
+	else {
+	    corefog = DeleteFog(corefog, MTX);
+		printf("Sample with MTX %d has been destroyed!\n", MTX);
+	}
 
     printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
@@ -806,10 +837,12 @@ void DestroyMyx () {
     strcpy(alter, name);
     alterlower(alter);
 
-    coremtx = DeleteMyc(coremtx, name, alter);
     Sample* check = SearchMyc(alter);
-    if (check == NULL) printf("Sample with name %s has been destroyed!\n", name);
-
+    if (check == NULL) printf("Sample not found\n");
+	else {
+		coremtx = DeleteMyc(coremtx, name, alter);
+		printf("Sample with name %s has been destroyed!\n", name);		
+	}
     printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
 }
@@ -817,6 +850,7 @@ void DestroyMyx () {
 // Export Menu
 void ExportFogMenu () {
     ExportFog(corefog);
+    corefog = NULL;
     printf("All Sample has been exported to Myctix Heaven Tree!\n");
 
     printf("Press enter to continue...");
@@ -825,6 +859,7 @@ void ExportFogMenu () {
 
 void ExportMyxMenu () {
     ExportMyx(coremtx);
+    coremtx = NULL;
     printf("All Sample has been exported to Alteration Fog Tree!\n");
 
     printf("Press enter to continue...");
