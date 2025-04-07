@@ -155,7 +155,12 @@ Sample* DeleteFog (Sample* root, int MTX) {
 			free(temp);
 		} else {
 			Sample* temp = minSample(root->right);
-			*root = *temp;
+			root->age = temp->age;
+            root->MTX = temp->MTX;
+            strcpy(root->name, temp->name);
+            strcpy(root->alter, temp->alter);
+            root->gender = temp->gender;
+            root->height = temp->height;
 			root->right = DeleteFog(root->right, temp->MTX);
 		}
 	}
@@ -185,7 +190,12 @@ Sample* DeleteMyc (Sample* root, char name[], char alter[]) {
             free(temp);
         } else {
             Sample* temp = minSample(root->right);
-            *root = *temp;
+            root->age = temp->age;
+            root->MTX = temp->MTX;
+            strcpy(root->name, temp->name);
+            strcpy(root->alter, temp->alter);
+            root->gender = temp->gender;
+            root->height = temp->height;
             root->right = DeleteMyc(root->right, temp->name, temp->alter);
         }
     }
@@ -346,6 +356,8 @@ void DestroyFog();
 void DestroyMyx();
 void ExportFogMenu();
 void ExportMyxMenu();
+void HelpMenu();
+void ExitMenu();
 
 // Main Function
 int main () {
@@ -384,10 +396,10 @@ void Menu () {
                     MyxMenu();
                     break;
                 case 2:
-					// PopMenu();
+				    HelpMenu();
                     break;
                 case 3:
-					// ExitMenu();
+					ExitMenu();
 					break;
 				default:
 					// Buat Penanda kalo ada Error
@@ -522,7 +534,7 @@ void AddFog () {
     printf("Input Sample Gender [Male/Female]: ");
     scanf(" %[^\n]", gender_input);
 
-    while (strcmpi(gender_input, "male") != 0 || strcmpi(gender_input, "female") != 0) {
+    while (strcmpi(gender_input, "male") != 0 && strcmpi(gender_input, "female") != 0) {
         printf("Input Sample Gender [Male/Female]: ");
         scanf(" %[^\n]", gender_input);
     }
@@ -543,7 +555,7 @@ void AddFog () {
     if (height > 500) {
         printf("Midgetizing Sample must be less than 500 mm!\n");
         printf("Sample rejected!\n");
-        printf("Press enter to continue...");
+        printf("Press enter to continue..."); getchar();
 	    while (getchar() != '\n');
         return;
     }
@@ -569,7 +581,7 @@ void AddFog () {
     corefog = GenerateFog(corefog, name, MTX, height, gender, age);
     printf("Sample %s has been added to Alteration Fog Tree!\n", name);
 
-    printf("Press enter to continue...");
+    printf("Press enter to continue..."); getchar();
 	while (getchar() != '\n');
 }
 
@@ -619,7 +631,7 @@ void AddMyx () {
         printf("Midgetizing Sample must be less than 500 mm!\n");
         printf("Sample rejected!\n");
         printf("Press enter to continue...");
-	    while (getchar() != '\n');
+	    while (getchar() != '\n'); getchar();
         return;
     }
 
@@ -644,7 +656,7 @@ void AddMyx () {
     corefog = GenerateMyc(corefog, name, MTX, height, gender, age, alter);
     printf("Sample %s has been added to Myctix Heaven Tree!\n", name);
 
-    printf("Press enter to continue...");
+    printf("Press enter to continue..."); getchar();
 	while (getchar() != '\n');
 }
 
