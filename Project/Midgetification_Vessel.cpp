@@ -666,7 +666,7 @@ void ViewFog () {
 	char input;
     bool menu = true;
 	system("cls");
-	while (true) {
+	while (menu) {
 		printf("%s Choose Traversal Ordering%s\n", CYAN, RESET);
 		printf("%s 1. Preorder %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
 		printf("%s 2. Inorder %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
@@ -686,14 +686,17 @@ void ViewFog () {
         } else if (input == '\r') {
             switch (position) {
                 case 0:
+                	if (corefog == NULL) printf("The Alteration Fog Tree is Empty\n");
                     Preorder(corefog);
                     menu = false;
                     break;
                 case 1:
-                    Inorder(corefog);
+                    if (corefog == NULL) printf("The Alteration Fog Tree is Empty\n");
+					Inorder(corefog);
                     menu = false;
                     break;
                 case 2:
+                	if (corefog == NULL) printf("The Alteration Fog Tree is Empty\n");
 					Postorder(corefog);
                     menu = false;
                     break;
@@ -707,7 +710,6 @@ void ViewFog () {
             }
         }
         
-        system("cls");
 	}
     printf("Press enter to continue...");
     while (getchar() != '\n');
@@ -718,7 +720,7 @@ void ViewMyx () {
 	char input;
     bool menu = true;
 	system("cls");
-	while (true) {
+	while (menu) {
 		printf("%s Choose Traversal Ordering%s\n", CYAN, RESET);
 		printf("%s 1. Preorder %s\n", (position == 0) ? ">>" : "  ", (position == 0) ? "<<" : "  ");
 		printf("%s 2. Inorder %s\n", (position == 1) ? ">>" : "  ", (position == 1) ? "<<" : "  ");
@@ -738,15 +740,18 @@ void ViewMyx () {
         } else if (input == '\r') {
             switch (position) {
                 case 0:
+                    if (coremtx == NULL) printf("The Myctix Heaven Tree is Empty\n");
                     Preorder(coremtx);
                     menu = false;
                     break;
                 case 1:
+                    if (coremtx == NULL) printf("The Myctix Heaven Tree is Empty\n");
                     Inorder(coremtx);
                     menu = false;
                     break;
                 case 2:
-					Postorder(coremtx);
+					if (coremtx == NULL) printf("The Myctix Heaven Tree is Empty\n");
+                    Postorder(coremtx);
                     menu = false;
                     break;
                 case 3:
@@ -779,9 +784,10 @@ void DestroyFog () {
     }
 
     corefog = DeleteFog(corefog, MTX);
-    printf("Sample with MTX %d has been destroyed!\n", MTX);
+    Sample* check = SearchFog(MTX);
+    if (check == NULL) printf("Sample with MTX %d has been destroyed!\n", MTX);
 
-    printf("Press enter to continue...");
+    printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
 }
 
@@ -801,9 +807,10 @@ void DestroyMyx () {
     alterlower(alter);
 
     coremtx = DeleteMyc(coremtx, name, alter);
-    printf("Sample with name %s has been destroyed!\n", name);
+    Sample* check = SearchMyc(alter);
+    if (check == NULL) printf("Sample with name %s has been destroyed!\n", name);
 
-    printf("Press enter to continue...");
+    printf("Press enter to continue..."); getchar();
     while (getchar() != '\n');
 }
 
