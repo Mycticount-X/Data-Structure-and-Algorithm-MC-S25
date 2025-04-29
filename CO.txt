@@ -7,11 +7,11 @@ CO MC-S25:
 
 [V] Binary Tree
     [V] Binary Search Tree
-    [ ] AVL Tree
+    [V] AVL Tree
 
-[ ] Hash Table
-	[ ] (Trash) Probing
-	[ ] Chaining
+[V] Hash Table
+    [V] (Trash) Probing
+    [V] Chaining
 
 [ ] Graph
 	[ ] Kruskal
