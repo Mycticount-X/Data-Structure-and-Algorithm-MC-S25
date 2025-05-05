@@ -13,15 +13,19 @@ This repository contains implementations of various data structures using C lang
   - [x] Queue
   - [x] Priority Queue
 
-### Tree Structures
-- [x] Binary Tree
-  - [x] Binary Search Tree
-  - [x] AVL Tree
+### Binary Tree Structures
+- [x] Binary Search Tree
+- [x] AVL Tree
 
 ### Hash Table
 - [x] Hash Table
   - [x] (Trash) Probing
   - [x] Chaining
+
+### Tree Extended Structure
+- [x] Trie
+- [ ] B-Tree
+- [ ] Red Black Tree
 
 ### Graph Structures
 - [ ] Graph
