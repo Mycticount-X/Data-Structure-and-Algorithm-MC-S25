@@ -58,6 +58,19 @@ int ExtractMin() {
     return min;
 }
 
+void PrintHeap() {
+    if (zone == 0) {
+        printf("Heap is empty.\n");
+        return;
+    }
+
+    printf("Min Heap: ");
+    for (int i = 0; i < zone; i++) {
+        printf("%d ", Heap[i]);
+    }
+    printf("\n");
+}
+
 int main () {
     return 0;
 }
