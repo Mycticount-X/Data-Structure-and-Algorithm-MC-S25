@@ -60,6 +60,46 @@ int ExtractMax () {
     return max;
 }
 
+int Search (int MTX) {
+    for (int i = 0; i < zone; i++) {
+        if (Heap[i] == MTX) {
+            return i;
+        }
+    }
+    return -1; // Not found
+}
+
+void Delete (int MTX) {
+    int index = Search(MTX);
+    if (index == -1) {
+        printf("Element %d not found in the heap.\n", MTX);
+        return;
+    }
+
+    Heap[index] = Heap[zone - 1];
+    zone--;
+
+    int curr = index;
+    while (curr < zone) {
+        int left = 2 * curr + 1;
+        int right = 2 * curr + 2;
+        int largest = curr;
+
+        if (left < zone && Heap[left] > Heap[largest]) {
+            largest = left;
+        }
+        if (right < zone && Heap[right] > Heap[largest]) {
+            largest = right;
+        }
+        if (largest != curr) {
+            swap(&Heap[curr], &Heap[largest]);
+            curr = largest;
+        } else {
+            break;
+        }
+    }
+}
+
 void PrintHeap () {
     if (zone == 0) {
         printf("Heap is empty.\n");
@@ -74,6 +114,12 @@ void PrintHeap () {
 }
 
 int main () {
-
+    Generate(888);
+    Generate(10);
+    Generate(20);
+    Generate(5);
+    Generate(30);
+    PrintHeap();
+    printf("Extracted Max: %d\n", ExtractMax());
     return 0;
 }
