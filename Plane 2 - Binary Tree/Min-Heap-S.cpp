@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
-// Node Structure
+// Zone Structure
 typedef struct Zone {
-    int value;
+    int MTX;
     Zone* left;
     Zone* right;
     Zone* parent;
@@ -16,9 +17,9 @@ typedef struct {
     int size;
 } MinHeap;
 
-Zone* GenerateZone(int value) {
+Zone* GenerateZone(int MTX) {
     Zone* newz = (Zone*)malloc(sizeof(Zone));
-    newz->value = value;
+    newz->MTX = MTX;
     newz->left = NULL;
     newz->right = NULL;
     newz->parent = NULL;
@@ -34,64 +35,102 @@ MinHeap* GenerateHeap() {
 
 // Support Function
 void swapValues(Zone* a, Zone* b) {
-    int temp = a->value;
-    a->value = b->value;
-    b->value = temp;
+    int temp = a->MTX;
+    a->MTX = b->MTX;
+    b->MTX = temp;
 }
 
-void heapifyUp(Zone* node) {
-    if (node->parent == NULL) return;
+void HeapifyUp(Zone* zone) {
+    if (zone->parent == NULL) return;
     
-    if (node->value < node->parent->value) {
-        swapValues(node, node->parent);
-        heapifyUp(node->parent);
-    }
-}
-
-void heapifyDown(Zone* node) {
-    if (node == NULL) return;
-    
-    Zone* smallest = node;
-    
-    if (node->left != NULL && node->left->value < smallest->value) {
-        smallest = node->left;
-    }
-    
-    if (node->right != NULL && node->right->value < smallest->value) {
-        smallest = node->right;
-    }
-    
-    if (smallest != node) {
-        swapValues(node, smallest);
-        heapifyDown(smallest);
+    if (zone->MTX < zone->parent->MTX) {
+        swapValues(zone, zone->parent);
+        HeapifyUp(zone->parent);
     }
 }
 
-Zone* findParentForNewNode(MinHeap* heap) {
+void HeapifyDown(Zone* zone) {
+    while (zone != NULL) {
+        Zone* smallest = zone;
+
+        if (zone->left && zone->left->MTX < smallest->MTX)
+            smallest = zone->left;
+        if (zone->right && zone->right->MTX < smallest->MTX)
+            smallest = zone->right;
+
+        if (smallest == zone)
+            break;
+
+        swapValues(zone, smallest);
+        zone = smallest;
+    }
+}
+
+int getMin(MinHeap* heap) {
+    if (heap->root == NULL) {
+        printf("Heap is empty!\n");
+        return -1;
+    }
+    return heap->root->MTX;
+}
+
+Zone* ParentNewZone(MinHeap* heap) {
     if (heap->size == 0) return NULL;
-    
-    int size = heap->size + 1;
-    Zone* current = heap->root;
-    
-    // Cari posisi parent berdasarkan representasi biner dari size
-    unsigned mask = 1 << (31 - __builtin_clz(size));
-    mask >>= 1;
-    
-    while (mask > 1) {
-        if (size & mask) {
-            current = current->right;
-        } else {
-            current = current->left;
-        }
-        mask >>= 1;
+
+    int index = heap->size + 1;
+    int level = (int)log2(index);
+    int steps[level]; 
+
+    int temp = index;
+    for (int i = level - 2; i >= 0; i--) {
+        steps[i] = temp % 2;  // 0 = kiri, 1 = kanan
+        temp /= 2;
     }
-    
+
+    Zone* current = heap->root;
+    for (int i = 0; i < level - 1; i++) {
+        if (steps[i] == 0)
+            current = current->left;
+        else
+            current = current->right;
+
+        if (current == NULL) return NULL;  // safety check
+    }
+
+    return current;
+}
+
+Zone* ZonebyIndex(MinHeap* heap, int index) {
+    if (index == 1) return heap->root;
+
+    int level = (int)log2(index);
+    // steps: 0 = left, 1 = right
+    int steps[level];
+    int temp = index;
+
+    // Backtrack
+    for (int i = level - 1; i >= 0; i--) {
+        steps[i] = temp % 2;  // 0 = left, 1 = right
+        temp /= 2;
+    }
+
+    // Navigasi
+    Zone* current = heap->root;
+    for (int i = 0; i < level; i++) {
+        if (steps[i] == 0) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+        if (current == NULL) return NULL;  // Invalid path
+    }
+
     return current;
 }
 
 // Insert Command
-void insert(MinHeap* heap, int value) {
-    Zone* newNode = GenerateZone(value);
+void InsertZone(MinHeap* heap, int MTX) {
+    Zone* newNode = GenerateZone(MTX);
     heap->size++;
     
     if (heap->root == NULL) {
@@ -99,7 +138,7 @@ void insert(MinHeap* heap, int value) {
         return;
     }
     
-    Zone* parent = findParentForNewNode(heap);
+    Zone* parent = ParentNewZone(heap);
     
     if (parent->left == NULL) {
         parent->left = newNode;
@@ -108,17 +147,17 @@ void insert(MinHeap* heap, int value) {
     }
     newNode->parent = parent;
     
-    heapifyUp(newNode);
+    HeapifyUp(newNode);
 }
 
 // Extract Command
-int extractMin(MinHeap* heap) {
+int ExtractMin(MinHeap* heap) {
     if (heap->root == NULL) {
         printf("Heap is empty!\n");
         return -1;
     }
     
-    int minValue = heap->root->value;
+    int minValue = heap->root->MTX;
     
     if (heap->size == 1) {
         free(heap->root);
@@ -127,14 +166,11 @@ int extractMin(MinHeap* heap) {
         return minValue;
     }
     
-    // Temukan node terakhir
-    Zone* lastNodeParent = findParentForNewNode(heap);
-    Zone* lastNode = (lastNodeParent->right != NULL) ? lastNodeParent->right : lastNodeParent->left;
+    Zone* lastNode = ZonebyIndex(heap, heap->size);
+    Zone* lastNodeParent = lastNode->parent;
+    heap->root->MTX = lastNode->MTX;
     
-    // Pindahkan nilai node terakhir ke root
-    heap->root->value = lastNode->value;
-    
-    // Hapus node terakhir
+    // Delete the last Zone
     if (lastNodeParent->right != NULL) {
         free(lastNodeParent->right);
         lastNodeParent->right = NULL;
@@ -144,40 +180,11 @@ int extractMin(MinHeap* heap) {
     }
     
     heap->size--;
-    
-    // Lakukan heapify down
-    heapifyDown(heap->root);
-    
+    HeapifyDown(heap->root);
     return minValue;
 }
 
-// Fungsi untuk mendapatkan nilai minimum tanpa menghapus
-int getMin(MinHeap* heap) {
-    if (heap->root == NULL) {
-        printf("Heap is empty!\n");
-        return -1;
-    }
-    return heap->root->value;
-}
-
-// Fungsi untuk mencetak heap (pre-order traversal)
-void printHeapHelper(Zone* node, int level) {
-    if (node == NULL) return;
-    
-    for (int i = 0; i < level; i++) printf("  ");
-    printf("%d\n", node->value);
-    
-    printHeapHelper(node->left, level + 1);
-    printHeapHelper(node->right, level + 1);
-}
-
-void printHeap(MinHeap* heap) {
-    printf("Min Heap (size: %d):\n", heap->size);
-    printHeapHelper(heap->root, 0);
-    printf("\n");
-}
-
-// Fungsi untuk menghapus heap dan membebaskan memori
+// Free Command
 void freeHeapHelper(Zone* node) {
     if (node == NULL) return;
     
@@ -191,25 +198,42 @@ void freeMinHeap(MinHeap* heap) {
     free(heap);
 }
 
+// Ordering Traversal
+void ViewSupport(Zone* node, int level) {
+    if (node == NULL) return;
+    
+    for (int i = 0; i < level; i++) printf("  ");
+    printf("%d\n", node->MTX);
+    
+    ViewSupport(node->left, level + 1);
+    ViewSupport(node->right, level + 1);
+}
+
+void ViewPlane(MinHeap* heap) {
+    printf("Min Heap (size: %d):\n", heap->size);
+    ViewSupport(heap->root, 0);
+    printf("\n");
+}
+
 int main() {
     MinHeap* heap = GenerateHeap();
     
-    insert(heap, 5);
-    insert(heap, 3);
-    insert(heap, 8);
-    insert(heap, 1);
-    insert(heap, 4);
-    insert(heap, 7);
+    InsertZone(heap, 5);
+    InsertZone(heap, 3);
+    InsertZone(heap, 8);
+    InsertZone(heap, 1);
+    InsertZone(heap, 4);
+    InsertZone(heap, 7);
     
-    printHeap(heap);
+    ViewPlane(heap);
     
-    printf("Extracted min: %d\n", extractMin(heap));
-    printHeap(heap);
+    printf("Extracted min: %d\n", ExtractMin(heap));
+    ViewPlane(heap);
     
     printf("Current min: %d\n", getMin(heap));
     
-    insert(heap, 2);
-    printHeap(heap);
+    InsertZone(heap, 2);
+    ViewPlane(heap);
     
     freeMinHeap(heap);
     return 0;
