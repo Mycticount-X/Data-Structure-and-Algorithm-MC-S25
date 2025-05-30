@@ -184,21 +184,20 @@ int ExtractMin(MinHeap* heap) {
     return minValue;
 }
 
-// Free Command
-void freeHeapHelper(Zone* node) {
+// Alter Command
+void AlterSupport(Zone* node) {
     if (node == NULL) return;
     
-    freeHeapHelper(node->left);
-    freeHeapHelper(node->right);
+    AlterSupport(node->left);
+    AlterSupport(node->right);
     free(node);
 }
 
-void freeMinHeap(MinHeap* heap) {
-    freeHeapHelper(heap->root);
+void ClearPlane(MinHeap* heap) {
+    AlterSupport(heap->root);
     free(heap);
 }
 
-// Ordering Traversal
 void ViewSupport(Zone* node, int level) {
     if (node == NULL) return;
     
@@ -235,6 +234,6 @@ int main() {
     InsertZone(heap, 2);
     ViewPlane(heap);
     
-    freeMinHeap(heap);
+    ClearPlane(heap);
     return 0;
 }
