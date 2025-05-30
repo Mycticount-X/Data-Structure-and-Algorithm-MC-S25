@@ -5,9 +5,9 @@
 // Node Structure
 typedef struct Zone {
     int value;
-    struct Zone* left;
-    struct Zone* right;
-    struct Zone* parent;
+    Zone* left;
+    Zone* right;
+    Zone* parent;
 } Zone;
 
 // Heap Structure
@@ -16,16 +16,16 @@ typedef struct {
     int size;
 } MinHeap;
 
-Zone* createNode(int value) {
-    Zone* newNode = (Zone*)malloc(sizeof(Zone));
-    newNode->value = value;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    newNode->parent = NULL;
-    return newNode;
+Zone* GenerateZone(int value) {
+    Zone* newz = (Zone*)malloc(sizeof(Zone));
+    newz->value = value;
+    newz->left = NULL;
+    newz->right = NULL;
+    newz->parent = NULL;
+    return newz;
 }
 
-MinHeap* createMinHeap() {
+MinHeap* GenerateHeap() {
     MinHeap* heap = (MinHeap*)malloc(sizeof(MinHeap));
     heap->root = NULL;
     heap->size = 0;
@@ -91,7 +91,7 @@ Zone* findParentForNewNode(MinHeap* heap) {
 
 // Insert Command
 void insert(MinHeap* heap, int value) {
-    Zone* newNode = createNode(value);
+    Zone* newNode = GenerateZone(value);
     heap->size++;
     
     if (heap->root == NULL) {
@@ -192,7 +192,7 @@ void freeMinHeap(MinHeap* heap) {
 }
 
 int main() {
-    MinHeap* heap = createMinHeap();
+    MinHeap* heap = GenerateHeap();
     
     insert(heap, 5);
     insert(heap, 3);
