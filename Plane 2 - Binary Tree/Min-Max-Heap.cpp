@@ -87,5 +87,14 @@ void ViewPlane () {
 }
 
 int main () {
+    InsertZone(10);
+    InsertZone(5);
+    InsertZone(20);
+    InsertZone(3);
+    InsertZone(8);
+    InsertZone(15);
+    InsertZone(30);
+
+    ViewPlane();
     return 0;
 }

@@ -1,239 +1,189 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <math.h>
 
-// Zone Structure
-typedef struct Zone {
-    int MTX;
-    Zone* left;
-    Zone* right;
-    Zone* parent;
-} Zone;
+struct Zone {
+	int MTX;
+	Zone *left, *right, *parent;
+};
 
-// Heap Structure
-typedef struct {
-    Zone* root;
-    int size;
-} MinHeap;
+struct Queue {
+	Zone *zone;
+	Queue *next;
+};
 
-Zone* GenerateZone(int MTX) {
-    Zone* newz = (Zone*)malloc(sizeof(Zone));
-    newz->MTX = MTX;
-    newz->left = NULL;
-    newz->right = NULL;
-    newz->parent = NULL;
-    return newz;
+Queue *head = NULL, *tail = NULL;
+
+void Push(Queue *newZone) {
+	if (!tail) {
+		head = tail = newZone;
+	} else {
+		tail->next = newZone;
+		tail = newZone;
+	}
 }
 
-MinHeap* GenerateHeap() {
-    MinHeap* heap = (MinHeap*)malloc(sizeof(MinHeap));
-    heap->root = NULL;
-    heap->size = 0;
-    return heap;
+void Pop() {
+	if (head == tail) {
+		free(head);
+		head = tail = NULL;
+	} else {
+		struct Queue *tmp = head;
+		head = head->next;
+		free(tmp);
+	}
 }
 
-// Support Function
-void swapValues(Zone* a, Zone* b) {
-    int temp = a->MTX;
-    a->MTX = b->MTX;
-    b->MTX = temp;
+Queue* Generate(Zone *curr) {
+	Queue *newque = (Queue*) malloc(sizeof(Queue));
+	newque->zone = curr;
+	newque->next = NULL;
+	return newque;
 }
 
-void HeapifyUp(Zone* zone) {
-    if (zone->parent == NULL) return;
-    
-    if (zone->MTX < zone->parent->MTX) {
-        swapValues(zone, zone->parent);
-        HeapifyUp(zone->parent);
-    }
+Zone* GenerateZone(int MTX, Zone *parent) {
+	Zone *newZone = (Zone*) malloc(sizeof(Zone));
+	newZone->MTX = MTX;
+	newZone->left = newZone->right = NULL;
+	newZone->parent = parent;
+	return newZone;
 }
 
-void HeapifyDown(Zone* zone) {
-    while (zone != NULL) {
-        Zone* smallest = zone;
+void upHeap(Zone *curr) {
+	if (!curr || !curr->parent) return;
 
-        if (zone->left && zone->left->MTX < smallest->MTX)
-            smallest = zone->left;
-        if (zone->right && zone->right->MTX < smallest->MTX)
-            smallest = zone->right;
-
-        if (smallest == zone)
-            break;
-
-        swapValues(zone, smallest);
-        zone = smallest;
-    }
+	if (curr->MTX < curr->parent->MTX) {
+		int tmp = curr->MTX;
+		curr->MTX = curr->parent->MTX;
+		curr->parent->MTX = tmp;
+		upHeap(curr->parent);
+	}
 }
 
-int getMin(MinHeap* heap) {
-    if (heap->root == NULL) {
-        printf("Heap is empty!\n");
-        return -1;
-    }
-    return heap->root->MTX;
+void downHeap(Zone *curr) {
+	if (!curr) return;
+
+	Zone *smallest = curr;
+
+	if (curr->left && curr->left->MTX < smallest->MTX) {
+		smallest = curr->left;
+	}
+	if (curr->right && curr->right->MTX < smallest->MTX) {
+		smallest = curr->right;
+	}
+
+	if (smallest != curr) {
+		int tmp = curr->MTX;
+		curr->MTX = smallest->MTX;
+		smallest->MTX = tmp;
+		downHeap(smallest);
+	}
 }
 
-Zone* ParentNewZone(MinHeap* heap) {
-    if (heap->size == 0) return NULL;
+Zone* Insert(Zone *curr, int x, Zone *parent) {
+	Zone *newZone = GenerateZone(x, NULL);
 
-    int index = heap->size + 1;
-    int level = (int)log2(index);
-    int steps[level]; 
+	if (!curr) {
+		newZone->parent = NULL;
+		return newZone;
+	}
 
-    int temp = index;
-    for (int i = level - 2; i >= 0; i--) {
-        steps[i] = temp % 2;  // 0 = kiri, 1 = kanan
-        temp /= 2;
-    }
+	head = tail = NULL;
+	Push(Generate(curr));
 
-    Zone* current = heap->root;
-    for (int i = 0; i < level - 1; i++) {
-        if (steps[i] == 0)
-            current = current->left;
-        else
-            current = current->right;
+	while (head) {
+		Zone *temp = head->zone;
 
-        if (current == NULL) return NULL;  // safety check
-    }
+		if (!temp->left) {
+			temp->left = newZone;
+			newZone->parent = temp;
+			upHeap(newZone);
+			break;
+		} else {
+			Push(Generate(temp->left));
+		}
 
-    return current;
+		if (!temp->right) {
+			temp->right = newZone;
+			newZone->parent = temp;
+			upHeap(newZone);
+			break;
+		} else {
+			Push(Generate(temp->right));
+		}
+
+		Pop();
+	}
+
+	while (head) Pop();
+	return curr;
 }
 
-Zone* ZonebyIndex(MinHeap* heap, int index) {
-    if (index == 1) return heap->root;
+Zone* Delete(Zone *curr) {
+	if (!curr) return NULL;
 
-    int level = (int)log2(index);
-    // steps: 0 = left, 1 = right
-    int steps[level];
-    int temp = index;
+	head = tail = NULL;
+	Push(Generate(curr));
+	Zone *last = NULL;
 
-    // Backtrack
-    for (int i = level - 1; i >= 0; i--) {
-        steps[i] = temp % 2;  // 0 = left, 1 = right
-        temp /= 2;
-    }
+	while (head) {
+		last = head->zone;
+		if (head->zone->left) Push(Generate(head->zone->left));
+		if (head->zone->right) Push(Generate(head->zone->right));
+		Pop();
+	}
 
-    // Navigasi
-    Zone* current = heap->root;
-    for (int i = 0; i < level; i++) {
-        if (steps[i] == 0) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
-        if (current == NULL) return NULL;  // Invalid path
-    }
+	if (last == curr) {
+		free(curr);
+		return NULL;
+	}
 
-    return current;
+	curr->MTX = last->MTX;
+
+	if (last->parent->left == last) {
+		last->parent->left = NULL;
+	} else {
+		last->parent->right = NULL;
+	}
+	free(last);
+
+	downHeap(curr);
+	return curr;
 }
 
-// Insert Command
-void InsertZone(MinHeap* heap, int MTX) {
-    Zone* newNode = GenerateZone(MTX);
-    heap->size++;
-    
-    if (heap->root == NULL) {
-        heap->root = newNode;
-        return;
-    }
-    
-    Zone* parent = ParentNewZone(heap);
-    
-    if (parent->left == NULL) {
-        parent->left = newNode;
-    } else {
-        parent->right = newNode;
-    }
-    newNode->parent = parent;
-    
-    HeapifyUp(newNode);
-}
+void ViewPlane(Zone *curr) {
+	if (!curr) {
+		printf("Permukaan saat ini kosong\n");
+		return;
+	}
 
-// Extract Command
-int ExtractMin(MinHeap* heap) {
-    if (heap->root == NULL) {
-        printf("Heap is empty!\n");
-        return -1;
-    }
-    
-    int minValue = heap->root->MTX;
-    
-    if (heap->size == 1) {
-        free(heap->root);
-        heap->root = NULL;
-        heap->size = 0;
-        return minValue;
-    }
-    
-    Zone* lastNode = ZonebyIndex(heap, heap->size);
-    Zone* lastNodeParent = lastNode->parent;
-    heap->root->MTX = lastNode->MTX;
-    
-    // Delete the last Zone
-    if (lastNodeParent->right != NULL) {
-        free(lastNodeParent->right);
-        lastNodeParent->right = NULL;
-    } else {
-        free(lastNodeParent->left);
-        lastNodeParent->left = NULL;
-    }
-    
-    heap->size--;
-    HeapifyDown(heap->root);
-    return minValue;
-}
+	head = tail = NULL;
+	Push(Generate(curr));
 
-// Alter Command
-void AlterSupport(Zone* node) {
-    if (node == NULL) return;
-    
-    AlterSupport(node->left);
-    AlterSupport(node->right);
-    free(node);
-}
-
-void ClearPlane(MinHeap* heap) {
-    AlterSupport(heap->root);
-    free(heap);
-}
-
-void ViewSupport(Zone* node, int level) {
-    if (node == NULL) return;
-    
-    for (int i = 0; i < level; i++) printf("  ");
-    printf("%d\n", node->MTX);
-    
-    ViewSupport(node->left, level + 1);
-    ViewSupport(node->right, level + 1);
-}
-
-void ViewPlane(MinHeap* heap) {
-    printf("Min Heap (size: %d):\n", heap->size);
-    ViewSupport(heap->root, 0);
-    printf("\n");
+	while (head) {
+		printf("Zone: %d\n", head->zone->MTX);
+		if (head->zone->left) Push(Generate(head->zone->left));
+		if (head->zone->right) Push(Generate(head->zone->right));
+		Pop();
+	}
 }
 
 int main() {
-    MinHeap* heap = GenerateHeap();
-    
-    InsertZone(heap, 5);
-    InsertZone(heap, 3);
-    InsertZone(heap, 8);
-    InsertZone(heap, 1);
-    InsertZone(heap, 4);
-    InsertZone(heap, 7);
-    
-    ViewPlane(heap);
-    
-    printf("Extracted min: %d\n", ExtractMin(heap));
-    ViewPlane(heap);
-    
-    printf("Current min: %d\n", getMin(heap));
-    
-    InsertZone(heap, 2);
-    ViewPlane(heap);
-    
-    ClearPlane(heap);
-    return 0;
+	Zone *root = NULL;
+
+	root = Insert(root, 13, root);
+	root = Insert(root, 12, root);
+	root = Insert(root, 7, root);
+	root = Insert(root, 9, root);
+	root = Insert(root, 11, root);
+
+	ViewPlane(root); printf("\n");
+
+	root = Delete(root); ViewPlane(root); printf("\n");
+	root = Delete(root); ViewPlane(root); printf("\n");
+	root = Delete(root); ViewPlane(root); printf("\n");
+	root = Delete(root); ViewPlane(root); printf("\n");
+	root = Delete(root); ViewPlane(root); printf("\n");
+
+	return 0;
 }
