@@ -54,19 +54,25 @@ void ViewRanks(int n) {
     }
 }
 
-void Solver () {
+void Solver() {
     int C, R;
-    scanf("%d %d", &C, &R);
+    printf("=== Minimum Bus Problem ===\n");
+    printf("Kota: ");
+    scanf("%d", &C);
+    printf("Jalan Bus: ");
+    scanf("%d", &R);
+
 
     makeSet(C);
 
+    printf("\nEdge:\n");
     for (int i = 0; i < R; i++) {
         int a, b;
+        printf("Jalan %d: ", i + 1);
         scanf("%d %d", &a, &b);
         unionSets(a, b);
     }
 
-    // Hitung root unik
     int count = 0;
     for (int i = 0; i < C; i++) {
         if (find(i) == i) {
@@ -74,28 +80,11 @@ void Solver () {
         }
     }
 
-    printf("%d\n", count);
+    printf("\n== Solver ==\n");
+    printf("Sistem ini memerlukan %d bus!\n", count);
 }
 
 int main() {
-    int n = 10;
-    makeSet(n);
-
-    unionSets(1, 2);
-    unionSets(2, 3);
-    unionSets(4, 5);
-    unionSets(6, 7);
-    unionSets(5, 6);
-    unionSets(3, 7); 
-
-    ViewParents(n);
-
-    // Cek apakah 1 dan 7 berada di set yang sama
-    if (find(1) == find(7)) {
-        printf("1 dan 7 berada dalam satu set.\n");
-    } else {
-        printf("1 dan 7 berada dalam set yang berbeda.\n");
-    }
-
+    Solver();
     return 0;
 }

@@ -54,7 +54,7 @@ void ViewRanks(int n) {
     }
 }
 
-void Solver () {
+void Solver() {
     int C, R;
     scanf("%d %d", &C, &R);
 
@@ -66,7 +66,6 @@ void Solver () {
         unionSets(a, b);
     }
 
-    // Hitung root unik
     int count = 0;
     for (int i = 0; i < C; i++) {
         if (find(i) == i) {
@@ -78,24 +77,6 @@ void Solver () {
 }
 
 int main() {
-    int n = 10;
-    makeSet(n);
-
-    unionSets(1, 2);
-    unionSets(2, 3);
-    unionSets(4, 5);
-    unionSets(6, 7);
-    unionSets(5, 6);
-    unionSets(3, 7); 
-
-    ViewParents(n);
-
-    // Cek apakah 1 dan 7 berada di set yang sama
-    if (find(1) == find(7)) {
-        printf("1 dan 7 berada dalam satu set.\n");
-    } else {
-        printf("1 dan 7 berada dalam set yang berbeda.\n");
-    }
-
+    Solver();
     return 0;
 }
