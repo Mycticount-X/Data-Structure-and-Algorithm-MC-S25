@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Zone Structure
+// Time Start: 3:35
+
 struct Zone {
 	int MTX;
-	Zone* left = NULL;
-	Zone* right = NULL;
+	Zone* left;
+	Zone* right;
 	int height;
 };
 
 Zone* core = NULL;
 
 Zone* Generate (int MTX) {
-	Zone* newz = (Zone*) malloc (sizeof(Zone));
+	Zone* newz = (Zone*) malloc(sizeof(Zone));
 	newz->MTX = MTX;
 	newz->left = NULL;
 	newz->right = NULL;
@@ -20,17 +21,17 @@ Zone* Generate (int MTX) {
 	return newz;
 }
 
-// Support Command
-int Height (Zone* root) {
+// Standart AVl
+int height (Zone* root) {
 	return (root == NULL) ? 0 : root->height;
 }
 
-int Balance (Zone* root) {
-	return (root == NULL) ? 0 : (Height(root->left) - Height(root->right));
+int balance (Zone* root) {
+	return (root == NULL) ? 0 : (height(root->left) - height(root->right));
 }
 
-int max (int a, int b) {
-	return (a > b) ? a : b;
+int findHeight (Zone* root) {
+	return 1 + ((height(root->left) > height(root->right)) ? height(root->left) : height(root->right));
 }
 
 Zone* minZone (Zone* root) {
@@ -41,69 +42,70 @@ Zone* minZone (Zone* root) {
 }
 
 // Standard Rotation
-Zone* rotateLeft (Zone* a) {
-	Zone* b = a->right;
-	Zone* c = b->left;
+Zone* rotateLeft (Zone* root) {
+	Zone* child = root->right;
+	Zone* grand = child->left;
 	
-	b->left = a;
-	a->right = c;
+	child->left = root;
+	root->right = grand;
 	
-	a->height = max(Height(a->left), Height(a->right)) + 1;
-	b->height = max(Height(b->left), Height(b->right)) + 1;
+	root->height = findHeight(root);
+	child->height = findHeight(child);
 	
-	return b;
+	return child;
 }
 
-Zone* rotateRight (Zone* a) {
-	Zone* b = a->left;
-	Zone* c = b->right;
+Zone* rotateRight (Zone* root) {
+	Zone* child = root->left;
+	Zone* grand = child->right;
 	
-	b->right = a;
-	a->left = c;
+	child->left = root;
+	root->right = grand;
 	
-	a->height = max(Height(a->left), Height(a->right)) + 1;
-	b->height = max(Height(b->left), Height(b->right)) + 1;
+	root->height = findHeight(root);
+	child->height = findHeight(child);
 	
-	return b;
+	return child;
 }
 
 // Main Command
-Zone* InsertZone (Zone* root, int MTX) {
+Zone* Insert (Zone* root, int MTX) {
 	if (root == NULL) {
 		root = Generate(MTX);
 		return root;
-	}	
+	}
 	
 	if (MTX < root->MTX) {
-		root->left = InsertZone(root->left, MTX);
+		root->left = Insert(root->left, MTX);
 	} else if (MTX > root->MTX) {
-		root->right = InsertZone(root->right, MTX);
+		root->right = Insert(root->right, MTX);
 	} else {
-		printf("Zona Duplikat terdeteksi!\n");
+		printf("Zona Duplikat Terdeteksi!\n");
 		return root;
 	}
 	
-	root->height = max(Height(root->left), Height(root->right)) + 1;
-	int balance = Balance(root);
+	// AVL Here
+	root->height = findHeight(root);
+	int bal = balance(root);
 	
-	// Kasus LL
-	if (balance > 1 && MTX < root->left->MTX) {
+	// LL
+	if (bal > 1 && MTX < root->left->MTX) {
 		return rotateRight(root);
-	} 
+	}
 	
-	// Kasus RR
-	if (balance < -1 && MTX > root->right->MTX) {
+	// RR
+	if (bal < -1 && MTX > root->right->MTX) {
 		return rotateLeft(root);
 	}
 	
-	// Kasus LR
-	if (balance > 1 && MTX > root->left->MTX) {
+	// LR
+	if (bal > 1 && MTX > root->left->MTX) {
 		root->left = rotateLeft(root->left);
 		return rotateRight(root);
-	} 
+	}
 	
-	// Kasus RL
-	if (balance < -1 && MTX < root->right->MTX) {
+	// RL
+	if (bal < -1 && MTX < root->left->MTX) {
 		root->right = rotateRight(root->right);
 		return rotateLeft(root);
 	}
@@ -111,19 +113,19 @@ Zone* InsertZone (Zone* root, int MTX) {
 	return root;
 }
 
-Zone* DeleteZone (Zone* root, int MTX) {
+Zone* Delete (Zone* root, int MTX) {
 	if (root == NULL) {
 		printf("Zona tidak ditemukan!\n");
-		return NULL;
+		return root;
 	}
 	
 	if (MTX < root->MTX) {
-		root->left = DeleteZone(root->left, MTX);
+		root->left = Delete(root->left, MTX);
 	} else if (MTX > root->MTX) {
-		root->right = DeleteZone(root->right, MTX);
+		root->right = Delete(root->right, MTX);
 	} else {
 		if ((root->left == NULL) || (root->right == NULL)) {
-			Zone* temp = root->left ? root->left : root->right;
+			Zone* temp = root->left ? root->left : root->right; 
 			if (temp == NULL) {
 				temp = root;
 				root = NULL;
@@ -131,37 +133,36 @@ Zone* DeleteZone (Zone* root, int MTX) {
 				*root = *temp;
 			}
 			free(temp);
-			temp = NULL;
 		} else {
 			Zone* temp = minZone(root->right);
 			root->MTX = temp->MTX;
-			root->right = DeleteZone(root->right, temp->MTX);
+			root->right = Delete(root->right, temp->MTX);
 		}
 	}
 	
+	// AVL Here
 	if (root == NULL) return root;
+	root->height = findHeight(root);
+	int bal = balance(root);
 	
-	root->height = max(Height(root->left), Height(root->right)) + 1;
-	int balance = Balance(root);
-	
-	// Kasus LL
-	if (balance > 1 && MTX < root->left->MTX) {
+	// LL
+	if (bal > 1 && balance(root->left) >= 0) {
 		return rotateRight(root);
-	} 
+	}
 	
-	// Kasus RR
-	if (balance < -1 && MTX > root->right->MTX) {
+	// RR
+	if (bal < -1 && balance(root->right) >= 0) {
 		return rotateLeft(root);
 	}
 	
-	// Kasus LR
-	if (balance > 1 && MTX > root->left->MTX) {
+	// LR
+	if (bal > 1 && balance(root->left) < 0) {
 		root->left = rotateLeft(root->left);
 		return rotateRight(root);
-	} 
+	}
 	
-	// Kasus RL
-	if (balance < -1 && MTX < root->right->MTX) {
+	// RL
+	if (bal < -1 && balance(root->right) < 0) {
 		root->right = rotateRight(root->right);
 		return rotateLeft(root);
 	}
@@ -169,7 +170,33 @@ Zone* DeleteZone (Zone* root, int MTX) {
 	return root;
 }
 
+void Inorder (Zone* root) {
+	if (root == NULL) return;
+	Inorder(root->left);
+	printf("Zone  : %d \n", root->MTX);
+	printf("Height: %d\n\n", root->height);
+	Inorder(root->right);
+} 
+
 int main () {
+	core = Insert(core, 0);
+	core = Insert(core, 25);
+	core = Insert(core, 40);
+	core = Insert(core, 50);
+	core = Insert(core, 60);
+	core = Insert(core, 75);
+	core = Insert(core, 100);
+	core = Insert(core, 50);
+	
+	Inorder(core);
+	
+	core = Delete(core, 50);
+	core = Delete(core, 100);
+	core = Delete(core, 25);
+	core = Delete(core, 50);
+	
+	Inorder(core);
 	return 0;
 }
 
+// Time End: 4:10 (35 min)
