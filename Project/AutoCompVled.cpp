@@ -335,7 +335,8 @@ void FindLongest(Zone *root, const char *prefix) {
         printf("  %s\n", root->Word);
 
         int len = strlen(root->Word);
-        if (len > longestLength) {
+        // Saya tambahkan logika untuk mencari kata terpanjang dengan lexicographical terbesar
+        if (len > longestLength || (len == longestLength && strcmp(root->Word, longestWord) > 0)) {
             longestLength = len;
             strcpy(longestWord, root->Word);
         }
@@ -490,6 +491,7 @@ void Menu() {
     scanf(" %[^\n]", prefix);
 
     longestLength = -1;
+    // Saya tambahkan logika jika sama panjang ambil yang lexicographical terbesar
     FindLongest(Core, prefix);
 
     if (longestLength == -1) {
