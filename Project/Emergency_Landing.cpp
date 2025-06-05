@@ -23,6 +23,7 @@ Plane* Generate (char id[], double fuel, int dist) {
 	newz->left = NULL;
 	newz->right = NULL;
 	newz->height = 1;
+ return newz;
 }
 
 bool compare (Plane* a, double fuel, int dist) {
@@ -55,8 +56,8 @@ Plane* minPlane (Plane* root) {
 
 Plane* maxPlane (Plane* root) {
 	Plane* curr = root;
-	while (curr->left != NULL) {
-		curr = curr->left;
+	while (curr->right != NULL) {
+		curr = curr->right;
 	} return curr;
 }
 
