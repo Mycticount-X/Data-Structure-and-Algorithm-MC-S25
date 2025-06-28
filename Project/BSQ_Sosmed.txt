@@ -1,0 +1,8 @@
+insert kelpin-playing, sleeping, eating
+insert kelpin-teaching
+insert kelpin-cosplaying
+show_all
+delete
+
+insert mimi-Remembrance, Ice
+show
