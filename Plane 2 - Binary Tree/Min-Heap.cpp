@@ -100,7 +100,7 @@ void Delete (int MTX) {
     }
 }
 
-void PrintHeap() {
+void ViewPlane() {
     if (zone == 0) {
         printf("Heap is empty.\n");
         return;
