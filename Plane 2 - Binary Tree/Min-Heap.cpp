@@ -58,6 +58,48 @@ int ExtractMin() {
     return min;
 }
 
+int Search (int MTX) {
+    for (int i = 0; i < zone; i++) {
+        if (Heap[i] == MTX) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void Delete (int MTX) {
+    int index = Search(MTX);
+    if (index == -1) {
+        printf("Element %d not found in the heap.\n", MTX);
+        return;
+    }
+
+    Heap[index] = Heap[zone - 1];
+    zone--;
+
+    int curr = index;
+    while (curr < zone) {
+        int left = 2 * curr + 1;
+        int right = 2 * curr + 2;
+        int smallest = curr;
+
+        if (left < zone && Heap[left] < Heap[smallest]) {
+            smallest = left;
+        }
+        if (right < zone && Heap[right] < Heap[smallest]) {
+            smallest = right;
+        }
+        if (smallest != curr) {
+            int temp = Heap[curr];
+            Heap[curr] = Heap[smallest];
+            Heap[smallest] = temp;
+            curr = smallest;
+        } else {
+            break;
+        }
+    }
+}
+
 void PrintHeap() {
     if (zone == 0) {
         printf("Heap is empty.\n");
